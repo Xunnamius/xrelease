@@ -1,168 +1,332 @@
-<h1 align="center" style="border-bottom: none;">📦🚀 semantic-release</h1>
-<h3 align="center">Fully automated version management and package publishing</h3>
-<p align="center">
-  <a href="https://github.com/semantic-release/semantic-release/discussions">
-    <img alt="Join the community on GitHub Discussions" src="https://img.shields.io/badge/Join%20the%20community-on%20GitHub%20Discussions-blue">
-  </a>
-  <a href="https://github.com/semantic-release/semantic-release/actions?query=workflow%3ATest+branch%3Amaster">
-    <img alt="Build states" src="https://github.com/semantic-release/semantic-release/workflows/Test/badge.svg">
-  </a>
-  <a href="https://securityscorecards.dev/viewer/?uri=github.com/semantic-release/semantic-release">
-    <img alt="OpenSSF Scorecard" src="https://api.securityscorecards.dev/projects/github.com/semantic-release/semantic-release/badge">
-  </a>
-  <a href="#badge">
-    <img alt="semantic-release: angular" src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release">
-  </a>
-</p>
-<p align="center">
-  <a href="https://www.npmjs.com/package/semantic-release">
-    <img alt="npm latest version" src="https://img.shields.io/npm/v/semantic-release/latest.svg">
-  </a>
-  <a href="https://www.npmjs.com/package/semantic-release">
-    <img alt="npm next version" src="https://img.shields.io/npm/v/semantic-release/next.svg">
-  </a>
-  <a href="https://www.npmjs.com/package/semantic-release">
-    <img alt="npm beta version" src="https://img.shields.io/npm/v/semantic-release/beta.svg">
-  </a>
-</p>
+<!-- prettier-ignore-start -->
 
-**semantic-release** automates the whole package release workflow including: determining the next version number, generating the release notes, and publishing the package.
+<!-- badges-start -->
 
-This removes the immediate connection between human emotions and version numbers, strictly following the [Semantic Versioning](http://semver.org) specification and communicating the **impact** of changes to consumers.
+[![Black Lives Matter!][badge-blm]][link-blm]
+[![Maintenance status][badge-maintenance]][link-repo]
+[![Last commit timestamp][badge-last-commit]][link-repo]
+[![Open issues][badge-issues]][link-issues]
+[![Pull requests][badge-pulls]][link-pulls]
 
-> Trust us, this will change your workflow for the better. – [egghead.io](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-automating-releases-with-semantic-release)
+<!-- badges-end -->
+
+<!-- prettier-ignore-end -->
+
+# semantic-release-atam
+
+```
+  A  nnotated
+  T  ags
+  A  nd
+  M  onorepos
+```
+
+This [semantic-release](https://github.com/semantic-release/github) fork makes
+some tiny tweaks to allow semantic-release to work with annotated tags and
+monorepos.
+
+This fork is meant to be temporary. These are the pending PRs implementing ATAM
+functionality:
+
+- [#1710 (annotated
+  tags)](https://github.com/semantic-release/semantic-release/pull/1710)
+- [#XXXX (monorepo
+  support)](https://github.com/semantic-release/semantic-release/pull/XXXX)
+- [#XXXX (better plugin loader
+  resolution)](https://github.com/semantic-release/semantic-release/pull/XXXX)
 
 ## Highlights
 
-- Fully automated release
-- Enforce [Semantic Versioning](https://semver.org) specification
-- New features and fixes are immediately available to users
-- Notify maintainers and users of new releases
-- Use formalized commit message convention to document changes in the codebase
-- Publish on different distribution channels (such as [npm dist-tags](https://docs.npmjs.com/cli/dist-tag)) based on git merges
-- Integrate with your [continuous integration workflow](docs/recipes/release-workflow/README.md#ci-configurations)
-- Avoid potential errors associated with manual releases
-- Support any [package managers and languages](docs/recipes/release-workflow/README.md#package-managers-and-languages) via [plugins](docs/usage/plugins.md)
-- Simple and reusable configuration via [shareable configurations](docs/usage/shareable-configurations.md)
-- Support for [npm package provenance](https://github.com/semantic-release/npm#npm-provenance) that promotes increased supply-chain security via signed attestations on GitHub Actions
+- Outwardly, nothing changes from the original semantic-release. It's a drop-in
+  replacement!
+- **semantic-release-atam is NOT published as a new npm package**, so you can
+  replace semantic-release without having to do `npm install --force`.
+- `master` branch is automatically rebased onto the latest release from
+  upstream.
+  - This allows semantic-release-atam to keep feature parity with
+    semantic-release.
+  - [Releases](https://github.com/Xunnamius/semantic-release-atam/releases) are
+    maintained too, meaning you can [install specific versions](#install).
+- Works with repos using [annotated
+  tags](https://github.com/semantic-release/semantic-release/pull/1710) out of
+  the box.
+  - This allows tags to be signed, for instance.
+- Can be configured to work with [monorepo/workspaces
+  setups](https://github.com/semantic-release/semantic-release/issues/193).
+  - Borrows several configuration options from
+    [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/git-raw-commits#gitoptspath).
+- Better plugin loader resolution when using extended configuration.
+  - Monorepo packages can now load shared configuration from a single location.
+- [Maintenance
+  branches](https://semantic-release.gitbook.io/semantic-release/usage/workflow-configuration#maintenance-branches)
+  can be easily configured to work with monorepos.
+- Arguably [less](https://github.com/atlassian/lerna-semantic-release)
+  [hacky](https://github.com/qiwi/multi-semantic-release)
+  [than](https://github.com/dhoulb/multi-semantic-release)
+  [prior](https://www.npmjs.com/package/semantic-release-monorepo)
+  [art](https://www.npmjs.com/package/semantic-release-plugin-decorators).
 
-## How does it work?
+## Install
 
-### Commit message format
+> **NEVER install semantic-release and semantic-release-atam at the same time!**
 
-**semantic-release** uses the commit messages to determine the consumer impact of changes in the codebase.
-Following formalized conventions for commit messages, **semantic-release** automatically determines the next [semantic version](https://semver.org) number, generates a changelog and publishes the release.
-
-By default, **semantic-release** uses [Angular Commit Message Conventions](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
-The commit message format can be changed with the [`preset` or `config` options](docs/usage/configuration.md#options) of the [@semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer#options) and [@semantic-release/release-notes-generator](https://github.com/semantic-release/release-notes-generator#options) plugins.
-
-Tools such as [commitizen](https://github.com/commitizen/cz-cli) or [commitlint](https://github.com/conventional-changelog/commitlint) can be used to help contributors and enforce valid commit messages.
-
-The table below shows which commit message gets you which release type when `semantic-release` runs (using the default configuration):
-
-| Commit message                                                                                                                                                                                   | Release type                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `fix(pencil): stop graphite breaking when too much pressure applied`                                                                                                                             | ~~Patch~~ Fix Release                                                                                           |
-| `feat(pencil): add 'graphiteWidth' option`                                                                                                                                                       | ~~Minor~~ Feature Release                                                                                       |
-| `perf(pencil): remove graphiteWidth option`<br><br>`BREAKING CHANGE: The graphiteWidth option has been removed.`<br>`The default graphite width of 10mm is always used for performance reasons.` | ~~Major~~ Breaking Release <br /> (Note that the `BREAKING CHANGE: ` token must be in the footer of the commit) |
-
-### Automation with CI
-
-**semantic-release** is meant to be executed on the CI environment after every successful build on the release branch.
-This way no human is directly involved in the release process and the releases are guaranteed to be [unromantic and unsentimental](https://github.com/dominictarr/sentimental-versioning#readme).
-
-### Triggering a release
-
-For each new commit added to one of the release branches (for example: `master`, `next`, `beta`), with `git push` or by merging a pull request or merging from another branch, a CI build is triggered and runs the `semantic-release` command to make a release if there are codebase changes since the last release that affect the package functionalities.
-
-**semantic-release** offers various ways to control the timing, the content and the audience of published releases.
-See example workflows in the following recipes:
-
-- [Using distribution channels](docs/recipes/release-workflow/distribution-channels.md#publishing-on-distribution-channels)
-- [Maintenance releases](docs/recipes/release-workflow/maintenance-releases.md#publishing-maintenance-releases)
-- [Pre-releases](docs/recipes/release-workflow/pre-releases.md#publishing-pre-releases)
-
-### Release steps
-
-After running the tests, the command `semantic-release` will execute the following steps:
-
-| Step              | Description                                                                                                                     |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Verify Conditions | Verify all the conditions to proceed with the release.                                                                          |
-| Get last release  | Obtain the commit corresponding to the last release by analyzing [Git tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging). |
-| Analyze commits   | Determine the type of release based on the commits added since the last release.                                                |
-| Verify release    | Verify the release conformity.                                                                                                  |
-| Generate notes    | Generate release notes for the commits added since the last release.                                                            |
-| Create Git tag    | Create a Git tag corresponding to the new release version.                                                                      |
-| Prepare           | Prepare the release.                                                                                                            |
-| Publish           | Publish the release.                                                                                                            |
-| Notify            | Notify of new releases or errors.                                                                                               |
-
-## Requirements
-
-In order to use **semantic-release** you need:
-
-- To host your code in a [Git repository](https://git-scm.com)
-- Use a Continuous Integration service that allows you to [securely set up credentials](docs/usage/ci-configuration.md#authentication)
-- A Git CLI version that meets [our version requirement](docs/support/git-version.md) installed in your Continuous Integration environment
-- A [Node.js](https://nodejs.org) version that meets [our version requirement](docs/support/node-version.md) installed in your Continuous Integration environment
-
-## Documentation
-
-- Usage
-  - [Getting started](docs/usage/getting-started.md)
-  - [Installation](docs/usage/installation.md)
-  - [CI Configuration](docs/usage/ci-configuration.md)
-  - [Configuration](docs/usage/configuration.md#configuration)
-  - [Plugins](docs/usage/plugins.md)
-  - [Workflow configuration](docs/usage/workflow-configuration.md)
-  - [Shareable configurations](docs/usage/shareable-configurations.md)
-- Extending
-  - [Plugins](docs/extending/plugins-list.md)
-  - [Shareable configuration](docs/extending/shareable-configurations-list.md)
-- Recipes
-  - [CI configurations](docs/recipes/ci-configurations/README.md)
-  - [Git hosted services](docs/recipes/git-hosted-services/README.md)
-  - [Release workflow](docs/recipes/release-workflow/README.md)
-- Developer guide
-  - [JavaScript API](docs/developer-guide/js-api.md)
-  - [Plugins development](docs/developer-guide/plugin.md)
-  - [Shareable configuration development](docs/developer-guide/shareable-configuration.md)
-- Support
-  - [Resources](docs/support/resources.md)
-  - [Frequently Asked Questions](docs/support/FAQ.md)
-  - [Troubleshooting](docs/support/troubleshooting.md)
-  - [Node version requirement](docs/support/node-version.md)
-  - [Node Support Policy](docs/support/node-support-policy.md)
-
-## Get help
-
-- [GitHub Discussions](https://github.com/semantic-release/semantic-release/discussions)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/semantic-release)
-- [Twitter](https://twitter.com/SemanticRelease)
-
-## Badge
-
-Let people know that your package is published using **semantic-release** and which [commit-convention](#commit-message-format) is followed by including this badge in your readme.
-
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
-
-```md
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+```shell
+npm install --save-dev https://xunn.at/semantic-release-atam
 ```
 
-## Team
+If you want to use a specific version of semantic-release-atam, you can specify
+its [release tag](https://github.com/Xunnamius/semantic-release-atam/releases)
+(without the prefix):
 
-| [![Gregor Martynus](https://github.com/gr2m.png?size=100)](https://github.com/gr2m) | [![Pierre Vanduynslager](https://github.com/pvdlg.png?size=100)](https://github.com/pvdlg) | [![Matt Travi](https://github.com/travi.png?size=100)](https://github.com/travi) |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| [Gregor Martynus](https://github.com/gr2m)                                          | [Pierre Vanduynslager](https://github.com/pvdlg)                                           | [Matt Travi](https://github.com/travi)                                           |
+```shell
+npm install --save-dev https://xunn.at/semantic-release-atam@19.0.5
+```
 
-## Alumni
+> Any valid [commit-ish](https://gitpkg.vercel.app/guide/#simplest-api) can be
+> specified after the "@", not just version tags.
 
-| [![Stephan Bönnemann](https://github.com/boennemann.png?size=100)](https://github.com/boennemann) | [![Rolf Erik Lekang](https://github.com/relekang.png?size=100)](https://github.com/relekang) | [![Johannes Jörg Schmidt](https://github.com/jo.png?size=100)](https://github.com/jo) | [![Finn Pauls](https://github.com/finnp.png?size=100)](https://github.com/finnp) | [![Christoph Witzko](https://github.com/christophwitzko.png?size=100)](https://github.com/christophwitzko) |
-| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| [Stephan Bönnemann](https://github.com/boennemann)                                                | [Rolf Erik Lekang](https://github.com/relekang)                                              | [Johannes Jörg Schmidt](https://github.com/jo)                                        | [Finn Pauls](https://github.com/finnp)                                           | [Christoph Witzko](https://github.com/christophwitzko)                                                     |
+If you don't want to rely on [xunn.at](https://xunn.at), you can also [install
+the package from GitHub
+directly](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#github-urls).
 
-<p align="center">
-  <img alt="Kill all humans" src="media/bender.png">
-</p>
+### Installing semantic-release-atam vs semantic-release
+
+Being a temporary fork, semantic-release-atam is not published as a package, so
+you cannot do `npm install semantic-release-atam`.
+
+This is because, to be an actual drop in replacement for semantic-release,
+semantic-release-atam needs to use the name "semantic-release" (e.g. to satisfy
+peer dependencies). Of course, only the _real_ semantic-release can be installed
+as "semantic-release", but we can get around that by using
+`"https://xunn.at/semantic-release-atam"` in lieu of a version in
+`package.json`:
+
+```javascript
+{
+  ...
+  "devDependencies": {
+    ...
+    "semantic-release": "https://xunn.at/semantic-release-atam"
+    ...
+  }
+}
+```
+
+This is what the [above](#install) command does for you automatically.
+
+## Using semantic-release-atam With a Monorepo
+
+> These instructions **SHOULD NOT** be used with
+> [Projector](https://github.com/Xunnamius/projector)'s pre-made configurations,
+> since they handle all of this for you.
+
+semantic-release-atam should be run once per package with each package's root as
+the working directory.
+
+For example:
+
+```bash
+REPO_ROOT=...
+NPM_CONFIG_USERCONFIG="$REPO_ROOT/.npmrc" NPM_TOKEN=$(cd $REPO_ROOT && npx --yes dotenv-cli -p NPM_TOKEN) GH_TOKEN=$(cd $REPO_ROOT && npx --yes dotenv-cli -p GITHUB_TOKEN) HUSKY=0 UPDATE_CHANGELOG=true GIT_AUTHOR_NAME=$(git config --global --get user.name) GIT_COMMITTER_NAME=$(git config --global --get user.name) GIT_AUTHOR_EMAIL=$(git config --global --get user.email) GIT_COMMITTER_EMAIL=$(git config --global --get user.email) npx --no-install semantic-release --extends "$REPO_ROOT/release.config.js"
+```
+
+Where `semantic-release --extends "$REPO_ROOT/release.config.js"` loads a shared
+`release.config.js` file located at the repository's root.
+
+> When running semantic-release-atam on a normal (non-mono) repo,
+> `release.config.js` would get picked up automatically. When running in a
+> monorepo package's subfolder (e.g. `packages/my-package-1`) however, the same
+> config file can be (re)used via the `--extends` CLI option.
+
+This fork makes the `gitLogOptions` option available in your
+`release.config.js`:
+
+```typescript
+// Suppose process.cwd() returns /path/to/repo/packages/my-package-1
+const targetPkgId = getPkgNameFromCwd();
+module.exports = {
+  // semantic-release-atam will ignore tags that don't belong to my-package-1
+  tagFormat: `${targetPkgId}@\${version}`,
+  gitLogOptions: {
+    path: [":(exclude)../my-package-2", ":(exclude)../my-package-3", ":(exclude)../my-package-4"],
+  },
+  // ...
+};
+```
+
+At the moment, `gitLogOptions` has a single valid option: `path: string | string[]`. Like with
+[conventional-changelog](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/git-raw-commits#gitoptspath),
+`gitLogOptions.path` (which accepts one or more
+[paths/pathspecs](https://git-scm.com/docs/git-log#Documentation/git-log.txt---ltpathgt82308203),
+including
+[exclusions](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-exclude))
+can be used to make semantic-release-atam consider only those commits that
+belong to the package, ignoring the others.
+
+> Note: it's usually better to filter via [exclusion
+> pathspecs](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-exclude)
+> than simple paths, which ensures important changes that happen outside the
+> `packages/` directory are considered by semantic-release-atam and
+> conventional-changelog.
+
+Combined with `tagFormat`, `gitLogOptions.path` makes semantic-release-atam
+flexible enough to work with most monorepo/workspace setups. Additionally,
+monorepo maintenance branch support can be enabled via the new
+`branchRangePrefix` option.
+
+Putting it all together:
+
+```javascript
+// ./release.config.js
+
+// Suppose process.cwd() returns /path/to/repo/packages/my-package-1
+// Suppose __dirname equals /path/to/repo (meaning this file is at repo root)
+const cwd = process.cwd();
+const pathParts = cwd.replace(`${__dirname}/`, "").split("/");
+// pathParts = [ 'packages', 'my-package-1' ]
+
+if (pathParts.length < 2 || pathParts[0] != "packages") {
+  throw new Error(`assert failed: illegal cwd: ${cwd}`);
+}
+
+const targetPkgId = pathParts[1];
+// targetPkgId = 'my-package-1'
+
+// Returns an array of exclusion pathspecs, one for each package except the
+// target package
+const getExcludedDirs = (source, except) =>
+  readdirSync(source, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory() && dirent.name != except)
+    .map((dirent) => `:(exclude)${source}/${dirent.name}`);
+
+module.exports = {
+  // Teach semantic-release-atam what our package-specific tags look like
+  // e.g.: my-package-1@1.0.0
+  tagFormat: `${targetPkgId}@\${version}`,
+  // ... and what our package-specific maintenance branches start with
+  // e.g.: my-package-1@1.x
+  branchRangePrefix: `${targetPkgId}@`,
+  gitLogOptions: {
+    // Tell semantic-release-atam to exclude commits from the other packages
+    path: getExcludedDirs("..", targetPkgId),
+  },
+  branches: [
+    // Teach semantic-release-atam what our maintenance branches look like. Must
+    // begin with `branchRangePrefix`
+    // e.g.: my-package-1@1.x
+    `${targetPkgId}@+([0-9])?(.{+([0-9]),x}).x`,
+    "main",
+    {
+      name: "canary",
+      channel: "canary",
+      prerelease: true,
+    },
+  ],
+  //...
+};
+```
+
+And, for package-specific changelog generation, a [conventional-changelog
+configuration
+file](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-core#config)
+at `conventional.config.js` that looks something like:
+
+```javascript
+// ...
+
+module.exports = {
+  options: {
+    lernaPackage: targetPkgId,
+  },
+  gitRawCommitsOpts: {
+    // ? Used to ignore changes in other packages
+    // ? See: https://github.com/sindresorhus/dargs#usage
+    "--": getExcludedDirs("..", targetPkgId),
+  },
+};
+```
+
+And voilà! 🎉
+
+The above can be used to (re)generate a complete `CHANGELOG.md` file for any
+monorepo package via CLI: `npx conventional-changelog --outfile CHANGELOG.md --config ../../conventional.config.js --release-count 0 --skip-unstable`. This
+can also be invoked via
+[@semantic-release/exec](https://github.com/semantic-release/exec) at build
+time.
+
+### Patched conventional-changelog
+
+If going with conventional-changelog as your changelog generator, consider using
+[the version patched to work properly with
+monorepos](https://github.com/Xunnamius/conventional-changelog) ([PRs
+pending](https://github.com/conventional-changelog/conventional-changelog/pull/865)):
+
+```bash
+npm install --save-dev https://xunn.at/conventional-changelog-cli
+```
+
+This patched version also accepts `workspace` as an alternative to the original
+`lernaPackage` option. The two options are functionally identical, except
+`workspace` accepts a path to a package directory where the `lernaPackage`
+accepts only a [package-id](https://github.com/Xunnamius/projector#terminology)
+(basename). Hence, `workspace` allows changelogs to be generated for monorepos
+that use a non-Lerna workspace/package structure.
+
+```javascript
+// ...
+
+module.exports = {
+  options: {
+    workspace: cwd,
+  },
+  gitRawCommitsOpts: {
+    // ? Used to ignore changes in other packages
+    // ? See: https://github.com/sindresorhus/dargs#usage
+    "--": getExcludedDirs("..", targetPkgId),
+  },
+};
+```
+
+## Fork Structure and Maintenance
+
+This fork is structured to be automatically rebased onto upstream releases when
+they occur. To facilitate this, care must be taken when committing changes to
+this repo. Specifically:
+
+- The HEAD of the `master` branch MUST ALWAYS be the `release: bump version`
+  commit. This allows the upstream synchronization script to do its job.
+- All changes should happen on the `master` branch.
+- Changes should be added to existing commits via `git commit --amend` and then
+  force pushed via `git push --force`. If amending a pre-existing commit is not
+  desirable for whatever reason, the new commit should be rebased _under_ the
+  `release: bump version` commit.
+- Never make custom releases or mess with the `atam@*` git tags. These are
+  automatically managed by the upstream synchronization script.
+
+For example, suppose we updated the `README.md` file and want to commit the
+changes:
+
+```shell
+git add README.md
+git commit -m mergeme
+git rebase -S -i HEAD~5 --no-verify
+# Either make the mergeme commit a "fixup" to a pre-existing commit or
+# reposition it to occur below HEAD
+git push --force
+```
+
+Any changes between `master` and the latest upstream release will be minted into
+a new local release _only after upstream makes a new release_. Until then, any
+changes will only be visible to those utilizing the `master` branch directly.
+
+[badge-blm]: https://xunn.at/badge-blm "Join the movement!"
+[link-blm]: https://xunn.at/donate-blm
+[badge-maintenance]: https://img.shields.io/maintenance/active/2022 "Is this
+    package maintained?"
+[link-repo]: https://github.com/xunnamius/semantic-release-atam
+[badge-last-commit]: https://img.shields.io/github/last-commit/xunnamius/semantic-release-atam "Latest commit timestamp"
+[badge-issues]: https://img.shields.io/github/issues/Xunnamius/semantic-release-atam "Open
+    issues"
+[link-issues]: https://github.com/Xunnamius/semantic-release-atam/issues?q=
+[badge-pulls]: https://img.shields.io/github/issues-pr/xunnamius/semantic-release-atam "Open pull requests"
+[link-pulls]: https://github.com/xunnamius/semantic-release-atam/pulls
