@@ -321,7 +321,7 @@ changes will only be visible to those utilizing the `master` branch directly.
 
 [badge-blm]: https://xunn.at/badge-blm "Join the movement!"
 [link-blm]: https://xunn.at/donate-blm
-[badge-maintenance]: https://img.shields.io/maintenance/active/2022 "Is this
+[badge-maintenance]: https://img.shields.io/maintenance/active/2023 "Is this
     package maintained?"
 [link-repo]: https://github.com/xunnamius/semantic-release-atam
 [badge-last-commit]: https://img.shields.io/github/last-commit/xunnamius/semantic-release-atam "Latest commit timestamp"
