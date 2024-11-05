@@ -1,168 +1,429 @@
-<h1 align="center" style="border-bottom: none;">📦🚀 semantic-release</h1>
-<h3 align="center">Fully automated version management and package publishing</h3>
-<p align="center">
-  <a href="https://github.com/semantic-release/semantic-release/discussions">
-    <img alt="Join the community on GitHub Discussions" src="https://img.shields.io/badge/Join%20the%20community-on%20GitHub%20Discussions-blue">
-  </a>
-  <a href="https://github.com/semantic-release/semantic-release/actions/workflows/test.yml">
-    <img alt="Build states" src="https://github.com/semantic-release/semantic-release/actions/workflows/test.yml/badge.svg">
-  </a>
-  <a href="https://securityscorecards.dev/viewer/?uri=github.com/semantic-release/semantic-release">
-    <img alt="OpenSSF Scorecard" src="https://api.securityscorecards.dev/projects/github.com/semantic-release/semantic-release/badge">
-  </a>
-  <a href="#badge">
-    <img alt="semantic-release: angular" src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release">
-  </a>
-</p>
-<p align="center">
-  <a href="https://www.npmjs.com/package/semantic-release">
-    <img alt="npm latest version" src="https://img.shields.io/npm/v/semantic-release/latest.svg">
-  </a>
-  <a href="https://www.npmjs.com/package/semantic-release">
-    <img alt="npm next version" src="https://img.shields.io/npm/v/semantic-release/next.svg">
-  </a>
-  <a href="https://www.npmjs.com/package/semantic-release">
-    <img alt="npm beta version" src="https://img.shields.io/npm/v/semantic-release/beta.svg">
-  </a>
+<p align="center" width="100%">
+  <img width="300" src="./xrelease.png">
 </p>
 
-**semantic-release** automates the whole package release workflow including: determining the next version number, generating the release notes, and publishing the package.
+<p align="center" width="100%">
+A <a href="https://github.com/semantic-release/github" target="_blank">semantic-release</a> fork that supports annotated tags and monorepos.
+</p>
 
-This removes the immediate connection between human emotions and version numbers, strictly following the [Semantic Versioning](http://semver.org) specification and communicating the **impact** of changes to consumers.
+<hr />
 
-> Trust us, this will change your workflow for the better. – [egghead.io](https://egghead.io/lessons/javascript-how-to-write-a-javascript-library-automating-releases-with-semantic-release)
+<!-- badges-start -->
 
-## Highlights
+<div align="center">
 
-- Fully automated release
-- Enforce [Semantic Versioning](https://semver.org) specification
-- New features and fixes are immediately available to users
-- Notify maintainers and users of new releases
-- Use formalized commit message convention to document changes in the codebase
-- Publish on different distribution channels (such as [npm dist-tags](https://docs.npmjs.com/cli/dist-tag)) based on git merges
-- Integrate with your [continuous integration workflow](docs/recipes/release-workflow/README.md#ci-configurations)
-- Avoid potential errors associated with manual releases
-- Support any [package managers and languages](docs/recipes/release-workflow/README.md#package-managers-and-languages) via [plugins](docs/usage/plugins.md)
-- Simple and reusable configuration via [shareable configurations](docs/usage/shareable-configurations.md)
-- Support for [npm package provenance](https://github.com/semantic-release/npm#npm-provenance) that promotes increased supply-chain security via signed attestations on GitHub Actions
+[![Black Lives Matter!][x-badge-blm-image]][x-badge-blm-link]
+[![Last commit timestamp][x-badge-lastcommit-image]][x-badge-repo-link]
+[![Codecov][x-badge-codecov-image]][x-badge-codecov-link]
+[![Source license][x-badge-license-image]][x-badge-license-link]
+[![Uses Semantic Release!][x-badge-semanticrelease-image]][x-badge-semanticrelease-link]
 
-## How does it work?
+[![NPM version][x-badge-npm-image]][x-badge-npm-link]
+[![Monthly Downloads][x-badge-downloads-image]][x-badge-npm-link]
 
-### Commit message format
+</div>
 
-**semantic-release** uses the commit messages to determine the consumer impact of changes in the codebase.
-Following formalized conventions for commit messages, **semantic-release** automatically determines the next [semantic version](https://semver.org) number, generates a changelog and publishes the release.
+<!-- badges-end -->
 
-By default, **semantic-release** uses [Angular Commit Message Conventions](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-format).
-The commit message format can be changed with the [`preset` or `config` options](docs/usage/configuration.md#options) of the [@semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer#options) and [@semantic-release/release-notes-generator](https://github.com/semantic-release/release-notes-generator#options) plugins.
+<br />
 
-Tools such as [commitizen](https://github.com/commitizen/cz-cli) or [commitlint](https://github.com/conventional-changelog/commitlint) can be used to help contributors and enforce valid commit messages.
+# xrelease (@-xun/release)
 
-The table below shows which commit message gets you which release type when `semantic-release` runs (using the default configuration):
+This [semantic-release](https://github.com/semantic-release/github) fork
+slightly tweaks the original so that it can work with both polyrepos and
+monorepos, including monorepos that were formerly polyrepos and repos using
+annotated tags.
 
-| Commit message                                                                                                                                                                                   | Release type                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `fix(pencil): stop graphite breaking when too much pressure applied`                                                                                                                             | ~~Patch~~ Fix Release                                                                                           |
-| `feat(pencil): add 'graphiteWidth' option`                                                                                                                                                       | ~~Minor~~ Feature Release                                                                                       |
-| `perf(pencil): remove graphiteWidth option`<br><br>`BREAKING CHANGE: The graphiteWidth option has been removed.`<br>`The default graphite width of 10mm is always used for performance reasons.` | ~~Major~~ Breaking Release <br /> (Note that the `BREAKING CHANGE: ` token must be in the footer of the commit) |
+For similarly monorepo-aware automatic changelog generation, see
+[xchangelog](https://github.com/Xunnamius/xchangelog), which xrelease uses
+internally as a replacement for
+[conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
+and therefore requires as a [peer dependency](./package.json).
 
-### Automation with CI
+> \[!NOTE]
+>
+> The only reason to use xrelease over
+> [semantic-release](https://github.com/semantic-release/github) is if you are
+> using an [xscripts](https://github.com/Xunnamius/xscripts)-powered project,
+> your repository uses annotated tags, or your repository is a monorepo.
+> Otherwise, just use
+> [semantic-release](https://github.com/semantic-release/github).
 
-**semantic-release** is meant to be executed on the CI environment after every successful build on the release branch.
-This way no human is directly involved in the release process and the releases are guaranteed to be [unromantic and unsentimental](https://github.com/dominictarr/sentimental-versioning#readme).
+## Install
 
-### Triggering a release
+To install xrelease:
 
-For each new commit added to one of the release branches (for example: `master`, `main`, `next`, `beta`), with `git push` or by merging a pull request or merging from another branch, a CI build is triggered and runs the `semantic-release` command to make a release if there are codebase changes since the last release that affect the package functionalities.
-
-**semantic-release** offers various ways to control the timing, the content and the audience of published releases.
-See example workflows in the following recipes:
-
-- [Using distribution channels](docs/recipes/release-workflow/distribution-channels.md#publishing-on-distribution-channels)
-- [Maintenance releases](docs/recipes/release-workflow/maintenance-releases.md#publishing-maintenance-releases)
-- [Pre-releases](docs/recipes/release-workflow/pre-releases.md#publishing-pre-releases)
-
-### Release steps
-
-After running the tests, the command `semantic-release` will execute the following steps:
-
-| Step              | Description                                                                                                                     |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Verify Conditions | Verify all the conditions to proceed with the release.                                                                          |
-| Get last release  | Obtain the commit corresponding to the last release by analyzing [Git tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging). |
-| Analyze commits   | Determine the type of release based on the commits added since the last release.                                                |
-| Verify release    | Verify the release conformity.                                                                                                  |
-| Generate notes    | Generate release notes for the commits added since the last release.                                                            |
-| Create Git tag    | Create a Git tag corresponding to the new release version.                                                                      |
-| Prepare           | Prepare the release.                                                                                                            |
-| Publish           | Publish the release.                                                                                                            |
-| Notify            | Notify of new releases or errors.                                                                                               |
-
-## Requirements
-
-In order to use **semantic-release** you need:
-
-- To host your code in a [Git repository](https://git-scm.com)
-- Use a Continuous Integration service that allows you to [securely set up credentials](docs/usage/ci-configuration.md#authentication)
-- A Git CLI version that meets [our version requirement](docs/support/git-version.md) installed in your Continuous Integration environment
-- A [Node.js](https://nodejs.org) version that meets [our version requirement](docs/support/node-version.md) installed in your Continuous Integration environment
-
-## Documentation
-
-- Usage
-  - [Getting started](docs/usage/getting-started.md)
-  - [Installation](docs/usage/installation.md)
-  - [CI Configuration](docs/usage/ci-configuration.md)
-  - [Configuration](docs/usage/configuration.md#configuration)
-  - [Plugins](docs/usage/plugins.md)
-  - [Workflow configuration](docs/usage/workflow-configuration.md)
-  - [Shareable configurations](docs/usage/shareable-configurations.md)
-- Extending
-  - [Plugins](docs/extending/plugins-list.md)
-  - [Shareable configuration](docs/extending/shareable-configurations-list.md)
-- Recipes
-  - [CI configurations](docs/recipes/ci-configurations/README.md)
-  - [Git hosted services](docs/recipes/git-hosted-services/README.md)
-  - [Release workflow](docs/recipes/release-workflow/README.md)
-- Developer guide
-  - [JavaScript API](docs/developer-guide/js-api.md)
-  - [Plugins development](docs/developer-guide/plugin.md)
-  - [Shareable configuration development](docs/developer-guide/shareable-configuration.md)
-- Support
-  - [Resources](docs/support/resources.md)
-  - [Frequently Asked Questions](docs/support/FAQ.md)
-  - [Troubleshooting](docs/support/troubleshooting.md)
-  - [Node version requirement](docs/support/node-version.md)
-  - [Node Support Policy](docs/support/node-support-policy.md)
-
-## Get help
-
-- [GitHub Discussions](https://github.com/semantic-release/semantic-release/discussions)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/semantic-release)
-- [Twitter](https://twitter.com/SemanticRelease)
-
-## Badge
-
-Let people know that your package is published using **semantic-release** and which [commit-convention](#commit-message-format) is followed by including this badge in your readme.
-
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
-
-```md
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+```shell
+npm install --save-dev semantic-release@npm:@-xun/release
 ```
 
-## Team
+If you want to use a specific version of xrelease, provide its semver:
 
-| [![Gregor Martynus](https://github.com/gr2m.png?size=100)](https://github.com/gr2m) | [![Pierre Vanduynslager](https://github.com/pvdlg.png?size=100)](https://github.com/pvdlg) | [![Matt Travi](https://github.com/travi.png?size=100)](https://github.com/travi) |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| [Gregor Martynus](https://github.com/gr2m)                                          | [Pierre Vanduynslager](https://github.com/pvdlg)                                           | [Matt Travi](https://github.com/travi)                                           |
+```shell
+npm install --save-dev semantic-release@npm:@-xun/release@1.2.3
+```
 
-## Alumni
+> \[!NOTE]
+>
+> xrelease installations reuse the "semantic-release" name so that plugins with
+> semantic-release as a peer dependency are able to recognize xrelease's
+> presence.
 
-| [![Stephan Bönnemann](https://github.com/boennemann.png?size=100)](https://github.com/boennemann) | [![Rolf Erik Lekang](https://github.com/relekang.png?size=100)](https://github.com/relekang) | [![Johannes Jörg Schmidt](https://github.com/jo.png?size=100)](https://github.com/jo) | [![Finn Pauls](https://github.com/finnp.png?size=100)](https://github.com/finnp) | [![Christoph Witzko](https://github.com/christophwitzko.png?size=100)](https://github.com/christophwitzko) |
-| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| [Stephan Bönnemann](https://github.com/boennemann)                                                | [Rolf Erik Lekang](https://github.com/relekang)                                              | [Johannes Jörg Schmidt](https://github.com/jo)                                        | [Finn Pauls](https://github.com/finnp)                                           | [Christoph Witzko](https://github.com/christophwitzko)                                                     |
+## Additional Features
 
-<p align="center">
-  <img alt="Kill all humans" src="media/bender.png">
-</p>
+xrelease offers a couple improvements over upstream:
+
+### Lightweight and annotated tag support
+
+Both
+[lightweight and annotated tags](https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag)
+are supported.
+
+> `man git-tag` says:
+>
+> > Annotated tags are meant for release while lightweight tags are meant for
+> > private or temporary object labels.
+
+### Support for monorepos
+
+Monorepo support is implemented via the extension of the
+[`tagFormat`](#tagformat-and-secondarytagformat) configuration option and the
+introduction of two new options: [`branchRangePrefix`](#branchrangeprefix) and
+[`gitLogOptions`](#gitlogoptions).
+
+> \[!WARNING]
+>
+> These options have only been tested in
+> [release configuration files](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+> and might not be available via CLI.
+
+Once properly configured, xrelease should be run once per package to be
+released, with the current working directory set to the root of each respective
+package.
+
+For monorepos, if the current working directory does not contain the
+repository's release configuration file, use `--extends` to refer to its
+location explicitly (e.g. `--extends ../../release.config.js`); xrelease
+supports using `--extends` to load plugins from `/node_modules/` directories
+higher up in the repository tree. Further, a tool like
+[Turbo](https://github.com/vercel/turborepo) can be used to orchestrate package
+releases in dependency order.
+
+> \[!NOTE]
+>
+> See
+> [babel-plugin-tester's `release.config.js`](https://github.com/babel-utils/babel-plugin-tester)
+> (polyrepo),
+> [xscripts's `release.config.js`](https://github.com/Xunnamius/xscripts)
+> (hybridrepo) or
+> [unified-utils's `release.config.js`](https://github.com/Xunnamius/unified-utils)
+> (monorepo) for complete functional examples of xrelease configurations in the
+> wild.
+>
+> See the [xscripts wiki](https://github.com/Xunnamius/xscripts/wiki) or the
+> [git diff between this repo and upstream](https://github.com/semantic-release/semantic-release/compare/master...Xunnamius:xrelease:main)
+> for technical details.
+
+The extended configuration options are:
+
+#### `tagFormat` (and `secondaryTagFormat`)
+
+Type: `string`\
+Default: `"v${version}"`
+
+The primary [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) format
+used by xrelease to create and identify releases. When cutting a new release,
+its corresponding tag name will be [generated](https://lodash.com/docs#template)
+using `tagFormat`.
+
+There is also `secondaryTagFormat`, an optional secondary [git
+tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) format that, if given,
+will be used in addition to `tagFormat` when filtering commits.
+
+`tagFormat` and `secondaryTagFormat` are key to proper monorepo support, since
+they dictate what previous tags are recognized as belonging to the current
+package to be released and which belong to other packages that should be
+filtered out.
+
+To support a simple monorepo that uses "@"-syntax for its release tags (e.g.
+`my-package@1.2.3`), your
+[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+might include:
+
+```javascript
+// Tell xrelease what package-specific tags look like
+tagFormat: `${cwdPackageName}@\${version}`;
+```
+
+To support a monorepo (that uses the "@"-syntax for its tags) with a root
+package that was previously a polyrepo (that used the standard semantic-release
+"v"-syntax for its tags), your
+[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+might include:
+
+```javascript
+  // Tell xrelease what package-specific tags look like
+tagFormat: `${cwdPackageName}@\${version}`,
+  // If this is the root package, also accept old-style tags for compat
+secondaryTagFormat: isCwdPackageTheRootPackage ? `v\${version}` : undefined
+```
+
+> \[!CAUTION]
+>
+> `\${version}` is a
+> [Lodash template variable](https://lodash.com/docs#template) while
+> `${cwdPackageName}` is a variable in a
+> [template string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+> That is: you are responsible for defining `cwdPackageName` and
+> `isCwdPackageTheRootPackage`, while `\${version}` is defined by xrelease.
+> Additionally, each `tagFormat` value must contain the `version` variable
+> exactly once, and the whole value must compile to a valid git reference.
+
+#### `gitLogOptions`
+
+Type: `{ path: string | string[] }`\
+Default: `"v${version}"`
+
+The [git log](https://git-scm.com/docs/git-log)
+[command line arguments](https://git-scm.com/docs/git-log#_options) used by
+xrelease to select commits for
+[further analysis](https://github.com/semantic-release/commit-analyzer).
+Currently, `gitLogOptions` has a single valid option: `path`, which corresponds
+to
+[`git log -- <path>`](https://git-scm.com/docs/git-log#Documentation/git-log.txt---ltpathgt82308203).
+
+This configuration option is key to proper monorepo support, since it dictates
+what commits are recognized as belonging to the current package to be released
+and which belong to other packages that should be filtered out.
+
+To support a monorepo attempting to release a new version of `my-package-1`,
+your
+[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+might include:
+
+```javascript
+gitLogOptions: {
+  // Tell xrelease to consider only commits that modify files under these paths
+  path: [
+    ':(exclude)../my-package-2',
+    ':(exclude)../my-package-3',
+    ':(exclude)../my-package-4'
+  ];
+}
+```
+
+In this example, we used
+[exclusion pathspecs](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-exclude)
+to create a blacklist of paths we _didn't want_ instead of a whitelist of paths
+we do want. Either approach is viable depending on project structure; however,
+using exclusions ensures important changes that happen outside the package's
+root directory (such as changes to a shared unpublished library) are considered
+by xrelease when
+[analyzing commits](https://github.com/semantic-release/commit-analyzer).
+
+Note how the given pathspecs are relative to e.g.
+`/home/user/my-project/packages/my-package-1`. That's because xrelease should
+always be run at the root of the package to be released.
+
+The given pathspecs also happen to work for releasing each of the other packages
+as well, assuming they are all share the same parent directory, e.g.
+`/home/user/my-project/packages`.
+
+To support a polyrepo instead, your
+[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+might include:
+
+```javascript
+gitLogOptions: {
+  // Tell xrelease not to filter commits at all and instead consider everything
+  path: [];
+}
+```
+
+Or we could omit the `gitLogOptions` object from `release.config.js` entirely.
+
+#### `branchRangePrefix`
+
+Type: `string`\
+Default: `""`
+
+The value that prefixes the
+[names](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#range)
+of relevant
+[maintenance branches](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#maintenance-branches).
+This is used internally by xrelease to generate the proper
+[`branches`](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md#branches)
+configurations for maintenance branches that refer to particular packages in a
+monorepo, and can be left undefined in a polyrepo.
+
+> \[!CAUTION]
+>
+> The `branchRangePrefix` string must **only match maintenance branches**! If
+> you also define a non-maintenance branch with a name starting with
+> `branchRangePrefix`, xrelease's behavior is undefined.
+
+To support a simple monorepo that uses "package-name@x.y.z"-syntax for its
+maintenance branch names (e.g. `my-package@1.2.3`), your
+[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+might include:
+
+```javascript
+// Tell xrelease to remove this string from maintenance branch names when
+// resolving their respective ranges and channels
+branchRangePrefix: `${cwdPackageName}@`,
+branches: [
+  // Tell xrelease what package-specific maintenance branch names look like.
+  // Specifically: they must begin with `branchRangePrefix`
+  `${cwdPackageName}@+([0-9])?(.{+([0-9]),x}).x`,
+  'main'
+]
+```
+
+To support a monorepo (that uses the "package@x.y.z"-syntax for its maintenance
+branch names) with a root package that was previously a polyrepo (that used the
+standard semantic-release "x.y.z"-syntax for its maintenance branch names), your
+[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+might include:
+
+```javascript
+// Tell xrelease to remove this string from maintenance branch names when
+// resolving their respective ranges and channels
+branchRangePrefix: `${cwdPackageName}@`,
+branches: [
+  // Tell xrelease what package-specific maintenance branch names look like.
+  // Specifically: they must begin with `branchRangePrefix`
+  `${cwdPackageName}@+([0-9])?(.{+([0-9]),x}).x`,
+  // If this is the root package, also accept old-style branch names for compat
+  ...(isCwdPackageTheRootPackage ? ['+([0-9])?(.{+([0-9]),x}).x'] : []),
+  'main'
+]
+```
+
+## Example
+
+Putting the new configuration options together, we could use what follows to
+release packages from the `/home/user/my-project` hybridrepo (a monorepo with a
+root package), which was formerly a polyrepo that we turned into a monorepo by
+giving its root `package.json` file a
+[`workspaces`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#workspaces)
+key.
+
+The `my-project` repo contains the four packages `my-package-1` through
+`my-package-4` under `/home/user/my-project/packages/*` along with a
+`/home/user/my-project/package.json` file containing the name of the root
+package (`my-root-package`) and a `/home/user/my-project/src` directory
+containing the root package's source code.
+
+We can push changes to `main`, which is our primary release branch that
+publishes to one or more packages' respective
+[`@latest` release channel](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#channel)
+(the default for NPM projects). Or we can push changes to `canary`, which will
+publish to one or more packages' respective
+[`@canary` release channel](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#pre-release-branches).
+We can also push changes to a `package-name@x.y.z` branch, where `package-name`
+represents the name of the monorepo package and `x.y.z` represents a typical
+[maintenance branch `name`](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#maintenance-branches).
+
+```javascript
+// ./release.config.js
+
+function makeConfiguration() {
+  const { cwdPackage } = getCurrentWorkingDirectoryPackageInformation();
+  const isCwdPackageTheRootPackage = isRootPackage(cwdPackage);
+  const gitLogPathspecs = getExcludedDirectoryPathspecs(cwdPackage);
+  const cwdPackageName = cwdPackage.json.name;
+
+  return {
+    tagFormat: [
+      // Tell xrelease what package-specific tags look like
+      `${cwdPackageName}@\${version}`,
+      // If this is the root package, accept old-style tags for compat
+      ...(isCwdPackageTheRootPackage ? [`v\${version}`] : [])
+    ],
+    // Tell xrelease to remove this string from maintenance branch names when
+    // resolving their respective ranges and channels
+    branchRangePrefix: `${cwdPackageName}@`,
+    gitLogOptions: {
+      // Tell xrelease to exclude commits from the other packages
+      path: gitLogPathspecs
+    },
+    branches: [
+      // Tell xrelease what package-specific maintenance branch names look like.
+      // Specifically: they must begin with `branchRangePrefix`
+      `${cwdPackageName}@+([0-9])?(.{+([0-9]),x}).x`,
+      // If this is the root package, accept old-style branch names for compat
+      ...(isCwdPackageTheRootPackage ? ['+([0-9])?(.{+([0-9]),x}).x'] : []),
+      'main',
+      {
+        name: 'canary',
+        channel: 'canary',
+        prerelease: true
+      }
+    ],
+    plugins: [
+      // ...
+    ]
+  };
+}
+
+module.exports = makeConfiguration();
+```
+
+## Contributing
+
+Consider contributing to upstream
+[semantic-release](https://github.com/semantic-release/semantic-release)
+instead.
+
+[x-badge-blm-image]: https://xunn.at/badge-blm 'Join the movement!'
+[x-badge-blm-link]: https://xunn.at/donate-blm
+[x-badge-codecov-image]:
+  https://img.shields.io/codecov/c/github/Xunnamius/xrelease/main?style=flat-square&token=HWRIOBAAPW
+  'Is this package well-tested?'
+[x-badge-codecov-link]: https://codecov.io/gh/Xunnamius/xrelease
+[x-badge-downloads-image]:
+  https://img.shields.io/npm/dm/@-xun/release?style=flat-square
+  'Number of times this package has been downloaded per month'
+[x-badge-lastcommit-image]:
+  https://img.shields.io/github/last-commit/Xunnamius/xrelease?style=flat-square
+  'Latest commit timestamp'
+[x-badge-license-image]:
+  https://img.shields.io/npm/l/@-xun/release?style=flat-square
+  "This package's source license"
+[x-badge-license-link]: https://github.com/Xunnamius/xrelease/blob/main/LICENSE
+[x-badge-npm-image]:
+  https://xunn.at/npm-pkg-version/@-xun/release
+  'Install this package using npm or yarn!'
+[x-badge-npm-link]: https://www.npmjs.com/package/@-xun/release
+[x-badge-repo-link]: https://github.com/Xunnamius/xrelease
+[x-badge-semanticrelease-image]:
+  https://xunn.at/badge-semantic-release
+  'This repo practices continuous integration and deployment!'
+[x-badge-semanticrelease-link]:
+  https://github.com/semantic-release/semantic-release
+[x-pkg-cjs-mojito]:
+  https://dev.to/jakobjingleheimer/configuring-commonjs-es-modules-for-nodejs-12ed#publish-only-a-cjs-distribution-with-property-exports
+[x-pkg-dual-package-hazard]:
+  https://nodejs.org/api/packages.html#dual-package-hazard
+[x-pkg-exports-conditions]:
+  https://webpack.js.org/guides/package-exports#reference-syntax
+[x-pkg-exports-module-key]:
+  https://webpack.js.org/guides/package-exports#providing-commonjs-and-esm-version-stateless
+[x-pkg-exports-types-key]:
+  https://devblogs.microsoft.com/typescript/announcing-typescript-4-5-beta#packagejson-exports-imports-and-self-referencing
+[x-pkg-side-effects-key]:
+  https://webpack.js.org/guides/tree-shaking#mark-the-file-as-side-effect-free
+[x-pkg-tree-shaking]: https://webpack.js.org/guides/tree-shaking
+[x-pkg-type]:
+  https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#type
+[x-repo-all-contributors]: https://github.com/all-contributors/all-contributors
+[x-repo-all-contributors-emojis]: https://allcontributors.org/docs/en/emoji-key
+[x-repo-choose-new-issue]:
+  https://github.com/Xunnamius/xrelease/issues/new/choose
+[x-repo-contributing]: /CONTRIBUTING.md
+[x-repo-docs]: docs
+[x-repo-license]: ./LICENSE
+[x-repo-package-json]: package.json
+[x-repo-pr-compare]: https://github.com/Xunnamius/xrelease/compare
+[x-repo-sponsor]: https://github.com/sponsors/Xunnamius
+[x-repo-support]: /.github/SUPPORT.md
