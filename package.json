@@ -1,9 +1,72 @@
 {
-  "name": "semantic-release",
-  "description": "Automated semver compliant package publishing",
-  "version": "0.0.0-transmuting",
-  "type": "module",
-  "author": "Stephan Bönnemann <stephan@boennemann.me> (http://boennemann.me)",
+  "name": "@-xun/release",
+  "version": "1.0.0",
+  "description": "A semantic-release fork with support for annotated tags and monorepos",
+  "keywords": [
+    "author",
+    "automation",
+    "changelog",
+    "module",
+    "package",
+    "publish",
+    "release",
+    "semver",
+    "version"
+  ],
+  "homepage": "https://github.com/Xunnamius/xscripts#readme",
+  "bugs": {
+    "url": "https://github.com/Xunnamius/xscripts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xunnamius/xscripts.git"
+  },
+  "license": "MIT",
+  "author": "Xunnamius",
+  "sideEffects": false,
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./package": "./package.json",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "index": [
+        "index.d.ts"
+      ],
+      "package": [
+        "package.json"
+      ]
+    }
+  },
+  "bin": {
+    "semantic-release": "bin/semantic-release.js",
+    "xrelease": "bin/semantic-release.js"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/index.js",
+    "/index.d.ts",
+    "/cli.js",
+    "/package.json",
+    "/README.md",
+    "/LICENSE"
+  ],
+  "scripts": {
+    "build": "NODE_NO_WARNINGS=1 tsc --no-check --incremental false",
+    "build:changelog": "NODE_NO_WARNINGS=1 xscripts build changelog",
+    "clean": "NODE_NO_WARNINGS=1 xscripts clean",
+    "format": "NODE_NO_WARNINGS=1 xscripts format --hush --files README.md",
+    "lint": "NODE_NO_WARNINGS=1 xscripts lint --linter remark",
+    "list-tasks": "NODE_NO_WARNINGS=1 xscripts list-tasks",
+    "release": "NODE_NO_WARNINGS=1 xscripts release --skip-missing-tasks",
+    "test": "NODE_NO_WARNINGS=1 c8 ava --verbose"
+  },
   "ava": {
     "files": [
       "test/**/*.test.js",
@@ -16,17 +79,19 @@
     ],
     "timeout": "2m"
   },
-  "bin": {
-    "semantic-release": "bin/semantic-release.js"
+  "c8": {
+    "all": true,
+    "include": [
+      "lib/**/*.js",
+      "index.js",
+      "cli.js"
+    ],
+    "reporter": [
+      "json",
+      "text",
+      "html"
+    ]
   },
-  "bugs": {
-    "url": "https://github.com/semantic-release/semantic-release/issues"
-  },
-  "contributors": [
-    "Gregor Martynus (https://twitter.com/gr2m)",
-    "Pierre Vanduynslager (https://twitter.com/@pvdlg_)",
-    "Matt Travi <npm@travi.org> (https://matt.travi.org/)"
-  ],
   "dependencies": {
     "@semantic-release/commit-analyzer": "^13.0.0-beta.1",
     "@semantic-release/error": "^4.0.0",
@@ -59,23 +124,17 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "ava": "6.2.0",
-    "c8": "10.1.2",
-    "clear-module": "4.1.2",
-    "cz-conventional-changelog": "3.3.0",
+    "@-xun/scripts": "^1.24.0",
+    "ava": "5.3.0",
+    "c8": "7.14.0",
     "dockerode": "4.0.2",
     "file-url": "4.0.0",
     "fs-extra": "11.2.0",
     "got": "14.4.4",
     "js-yaml": "4.1.0",
-    "lockfile-lint": "4.14.0",
-    "ls-engines": "0.9.3",
     "mockserver-client": "5.15.0",
-    "nock": "13.5.5",
-    "npm-run-all2": "7.0.1",
     "p-retry": "6.2.0",
     "prettier": "3.3.3",
-    "publint": "0.2.12",
     "sinon": "19.0.2",
     "stream-buffers": "3.0.3",
     "tempy": "3.1.0",
@@ -84,83 +143,7 @@
   "engines": {
     "node": ">=20.8.1"
   },
-  "files": [
-    "bin",
-    "docs",
-    "lib",
-    "index.d.ts",
-    "index.js",
-    "cli.js"
-  ],
-  "homepage": "https://github.com/semantic-release/semantic-release#readme",
-  "keywords": [
-    "author",
-    "automation",
-    "changelog",
-    "module",
-    "package",
-    "publish",
-    "release",
-    "semver",
-    "version"
-  ],
-  "license": "MIT",
-  "main": "./index.js",
-  "types": "index.d.ts",
-  "c8": {
-    "include": [
-      "lib/**/*.js",
-      "index.js",
-      "cli.js"
-    ],
-    "reporter": [
-      "json",
-      "text",
-      "html"
-    ],
-    "all": true
-  },
-  "lockfile-lint": {
-    "path": "package-lock.json",
-    "type": "npm",
-    "validate-https": true,
-    "allowed-hosts": [
-      "npm"
-    ]
-  },
-  "prettier": {
-    "printWidth": 120,
-    "trailingComma": "es5"
-  },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/semantic-release/semantic-release.git"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "scripts": {
-    "lint:prettier": "prettier --check \"*.{js,json,md}\" \".github/**/*.{md,yml}\" \"docs/**/*.md\" \"{bin,lib,test}/**/*.js\"",
-    "lint:prettier:fix": "prettier --write \"*.{js,json,md}\" \".github/**/*.{md,yml}\" \"docs/**/*.md\" \"{bin,lib,test}/**/*.js\"",
-    "lint:lockfile": "lockfile-lint",
-    "lint:engines": "ls-engines",
-    "lint:publish": "publint --strict",
-    "semantic-release": "./bin/semantic-release.js",
-    "test": "npm-run-all --print-label --parallel lint:* --parallel test:*",
-    "test:unit": "c8 ava --verbose",
-    "test:integration": "ava --verbose test/integration.test.js",
-    "test:e2e": "ava --verbose test/e2e.test.js"
-  },
-  "renovate": {
-    "extends": [
-      "github>semantic-release/.github:renovate-config"
-    ]
-  },
-  "packageManager": "npm@10.9.0"
+    "access": "public"
+  }
 }
