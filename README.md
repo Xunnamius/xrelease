@@ -3,7 +3,7 @@
 </p>
 
 <p align="center" width="100%">
-A <a href="https://github.com/semantic-release/github" target="_blank">semantic-release</a> fork that supports annotated tags and monorepos.
+A <a href="https://github.com/semantic-release/github" target="_blank">semantic-release</a> fork that supports annotated tags and monorepos
 </p>
 
 <hr />
@@ -29,25 +29,38 @@ A <a href="https://github.com/semantic-release/github" target="_blank">semantic-
 
 # xrelease (@-xun/release)
 
-This [semantic-release](https://github.com/semantic-release/github) fork
+This [semantic-release][1] fork
 slightly tweaks the original so that it can work with both polyrepos and
-monorepos, including monorepos that were formerly polyrepos and repos using
-annotated tags.
-
-For similarly monorepo-aware automatic changelog generation, see
-[xchangelog](https://github.com/Xunnamius/xchangelog), which xrelease uses
-internally as a replacement for
-[conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
-and therefore requires as a [peer dependency](./package.json).
+monorepos.
 
 > \[!NOTE]
 >
 > The only reason to use xrelease over
-> [semantic-release](https://github.com/semantic-release/github) is if you are
-> using an [xscripts](https://github.com/Xunnamius/xscripts)-powered project,
+> [semantic-release][1] is if you are
+> using an [xscripts][2]-powered project,
 > your repository uses annotated tags, or your repository is a monorepo.
 > Otherwise, just use
-> [semantic-release](https://github.com/semantic-release/github).
+> [semantic-release][1].
+
+<br />
+
+---
+
+<!-- remark-ignore-start -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Install](#install)
+- [Additional Features](#additional-features)
+  - [Lightweight and Annotated Tag Support](#lightweight-and-annotated-tag-support)
+  - [Support for Monorepos](#support-for-monorepos)
+- [Example](#example)
+- [Contributing](#contributing)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- remark-ignore-end -->
+
+<br />
 
 ## Install
 
@@ -73,10 +86,10 @@ npm install --save-dev semantic-release@npm:@-xun/release@1.2.3
 
 xrelease offers a couple improvements over upstream:
 
-### Lightweight and annotated tag support
+### Lightweight and Annotated Tag Support
 
 Both
-[lightweight and annotated tags](https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag)
+[lightweight and annotated tags][3]
 are supported.
 
 > `man git-tag` says:
@@ -84,17 +97,16 @@ are supported.
 > > Annotated tags are meant for release while lightweight tags are meant for
 > > private or temporary object labels.
 
-### Support for monorepos
+### Support for Monorepos
 
-Monorepo support is implemented via the extension of the
-[`tagFormat`](#tagformat-and-secondarytagformat) configuration option and the
-introduction of two new options: [`branchRangePrefix`](#branchrangeprefix) and
-[`gitLogOptions`](#gitlogoptions).
+Monorepo support is implemented via the existing [`tagFormat`][4] configuration
+option and the introduction of two new options: [`branchRangePrefix`][5] and
+[`gitLogOptions`][6].
 
 > \[!WARNING]
 >
 > These options have only been tested in
-> [release configuration files](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+> [release configuration files][7]
 > and might not be available via CLI.
 
 Once properly configured, xrelease should be run once per package to be
@@ -106,48 +118,42 @@ repository's release configuration file, use `--extends` to refer to its
 location explicitly (e.g. `--extends ../../release.config.js`); xrelease
 supports using `--extends` to load plugins from `/node_modules/` directories
 higher up in the repository tree. Further, a tool like
-[Turbo](https://github.com/vercel/turborepo) can be used to orchestrate package
+[Turbo][8] can be used to orchestrate package
 releases in dependency order.
 
 > \[!NOTE]
 >
 > See
-> [babel-plugin-tester's `release.config.js`](https://github.com/babel-utils/babel-plugin-tester)
+> [babel-plugin-tester's `release.config.js`][9]
 > (polyrepo),
-> [xscripts's `release.config.js`](https://github.com/Xunnamius/xscripts)
+> [xscripts's `release.config.js`][2]
 > (hybridrepo) or
-> [unified-utils's `release.config.js`](https://github.com/Xunnamius/unified-utils)
+> [unified-utils's `release.config.js`][10]
 > (monorepo) for complete functional examples of xrelease configurations in the
 > wild.
 >
-> See the [xscripts wiki](https://github.com/Xunnamius/xscripts/wiki) or the
-> [git diff between this repo and upstream](https://github.com/semantic-release/semantic-release/compare/master...Xunnamius:xrelease:main)
+> See the [xscripts wiki][11] or the
+> [git diff between this repo and upstream][12]
 > for technical details.
 
 The extended configuration options are:
 
-#### `tagFormat` (and `secondaryTagFormat`)
+#### `tagFormat`
 
 Type: `string`\
 Default: `"v${version}"`
 
-The primary [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) format
-used by xrelease to create and identify releases. When cutting a new release,
-its corresponding tag name will be [generated](https://lodash.com/docs#template)
-using `tagFormat`.
+The [git tag][13] format used by xrelease to create and identify releases. When
+cutting a new release, its corresponding tag name will be [generated][14] using
+`tagFormat`.
 
-There is also `secondaryTagFormat`, an optional secondary [git
-tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) format that, if given,
-will be used in addition to `tagFormat` when filtering commits.
-
-`tagFormat` and `secondaryTagFormat` are key to proper monorepo support, since
-they dictate what previous tags are recognized as belonging to the current
-package to be released and which belong to other packages that should be
-filtered out.
+`tagFormat` is key to proper monorepo support since it dictates which existing
+tags belong to the current package to be released and which belong to other
+packages that should be filtered out.
 
 To support a simple monorepo that uses "@"-syntax for its release tags (e.g.
 `my-package@1.2.3`), your
-[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+[release configuration][7]
 might include:
 
 ```javascript
@@ -155,56 +161,45 @@ might include:
 tagFormat: `${cwdPackageName}@\${version}`;
 ```
 
-To support a monorepo (that uses the "@"-syntax for its tags) with a root
-package that was previously a polyrepo (that used the standard semantic-release
-"v"-syntax for its tags), your
-[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
-might include:
-
-```javascript
-  // Tell xrelease what package-specific tags look like
-tagFormat: `${cwdPackageName}@\${version}`,
-  // If this is the root package, also accept old-style tags for compat
-secondaryTagFormat: isCwdPackageTheRootPackage ? `v\${version}` : undefined
-```
-
 > \[!CAUTION]
 >
 > `\${version}` is a
-> [Lodash template variable](https://lodash.com/docs#template) while
+> [Lodash template variable][14] while
 > `${cwdPackageName}` is a variable in a
-> [template string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+> [template string][15].
 > That is: you are responsible for defining `cwdPackageName` and
 > `isCwdPackageTheRootPackage`, while `\${version}` is defined by xrelease.
 > Additionally, each `tagFormat` value must contain the `version` variable
 > exactly once, and the whole value must compile to a valid git reference.
 
+To refactor a polyrepo (that uses the standard semantic-release "v"-syntax for
+its tags) into a monorepo (that uses the "@"-syntax for its tags), optionally
+with a root package, use
+[`@-xun/scripts`'s "renovate" command][16]:
+`npx xscripts project renovate --task transmute-to-monorepo`.
+
 #### `gitLogOptions`
 
-Type: `{ path: string | string[] }`\
+Type: `{ paths?: string | string[], flags?: string | string[] }`\
 Default: `"v${version}"`
 
-The [git log](https://git-scm.com/docs/git-log)
-[command line arguments](https://git-scm.com/docs/git-log#_options) used by
-xrelease to select commits for
-[further analysis](https://github.com/semantic-release/commit-analyzer).
-Currently, `gitLogOptions` has a single valid option: `path`, which corresponds
-to
-[`git log -- <path>`](https://git-scm.com/docs/git-log#Documentation/git-log.txt---ltpathgt82308203).
+The [git log][17] [command line arguments][18] used by xrelease to select
+commits for [further analysis][19]. Currently, `gitLogOptions` has two valid
+options: `flags` and `paths`, which correspond to [`git log <flags> -- <paths>`][20].
 
-This configuration option is key to proper monorepo support, since it dictates
-what commits are recognized as belonging to the current package to be released
-and which belong to other packages that should be filtered out.
+`gitLogOptions` is key to proper monorepo support since it dictates what
+commits belong to the current package to be released and which belong to other
+packages that should be filtered out.
 
 To support a monorepo attempting to release a new version of `my-package-1`,
 your
-[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+[release configuration][7]
 might include:
 
 ```javascript
 gitLogOptions: {
   // Tell xrelease to consider only commits that modify files under these paths
-  path: [
+  paths: [
     ':(exclude)../my-package-2',
     ':(exclude)../my-package-3',
     ':(exclude)../my-package-4'
@@ -213,34 +208,52 @@ gitLogOptions: {
 ```
 
 In this example, we used
-[exclusion pathspecs](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-exclude)
+[exclusion pathspecs][21]
 to create a blacklist of paths we _didn't want_ instead of a whitelist of paths
 we do want. Either approach is viable depending on project structure; however,
 using exclusions ensures important changes that happen outside the package's
 root directory (such as changes to a shared unpublished library) are considered
 by xrelease when
-[analyzing commits](https://github.com/semantic-release/commit-analyzer).
+[analyzing commits][19].
 
 Note how the given pathspecs are relative to e.g.
 `/home/user/my-project/packages/my-package-1`. That's because xrelease should
 always be run at the root of the package to be released.
 
-The given pathspecs also happen to work for releasing each of the other packages
-as well, assuming they are all share the same parent directory, e.g.
+The given pathspecs happen to work for releasing each of the other packages as
+well, assuming they are all share the same parent directory, e.g.
 `/home/user/my-project/packages`.
 
 To support a polyrepo instead, your
-[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+[release configuration][7]
 might include:
 
 ```javascript
 gitLogOptions: {
   // Tell xrelease not to filter commits at all and instead consider everything
-  path: [];
+  paths: [];
 }
 ```
 
-Or we could omit the `gitLogOptions` object from `release.config.js` entirely.
+Or we could omit the `gitLogOptions` object from `release.config.js` entirely,
+which would be equivalent.
+
+Finally, you can use `flags` to ensure [`git log`][20] is invoked with certain
+flags. For instance, we can tell xrelease to ignore all commits reachable by an
+"initial" commit (including said commit itself). This could be useful if we
+forked a large project with many thousands of conventional commits that should
+be ignored by the commit analyzer:
+
+```javascript
+gitLogOptions: {
+  // Tell xrelease to filter commits created at/after the latest commit with
+  // "[INIT]" in its subject, a reference to which we acquired by running:
+  // const ref = `git log -1 --pretty=format:%H --fixed-strings --grep '[INIT]'`
+  flags: ref ? [`^${ref}`] : [];
+}
+```
+
+You can pass any flag that [`git log`][20] understands.
 
 #### `branchRangePrefix`
 
@@ -248,11 +261,11 @@ Type: `string`\
 Default: `""`
 
 The value that prefixes the
-[names](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#range)
+[names][22]
 of relevant
-[maintenance branches](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#maintenance-branches).
+[maintenance branches][23].
 This is used internally by xrelease to generate the proper
-[`branches`](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md#branches)
+[`branches`][24]
 configurations for maintenance branches that refer to particular packages in a
 monorepo, and can be left undefined in a polyrepo.
 
@@ -262,9 +275,9 @@ monorepo, and can be left undefined in a polyrepo.
 > you also define a non-maintenance branch with a name starting with
 > `branchRangePrefix`, xrelease's behavior is undefined.
 
-To support a simple monorepo that uses "package-name@x.y.z"-syntax for its
+To support a simple monorepo that uses "[package-name@x.y.z][25]"-syntax for its
 maintenance branch names (e.g. `my-package@1.2.3`), your
-[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
+[release configuration][7]
 might include:
 
 ```javascript
@@ -279,25 +292,12 @@ branches: [
 ]
 ```
 
-To support a monorepo (that uses the "package@x.y.z"-syntax for its maintenance
-branch names) with a root package that was previously a polyrepo (that used the
-standard semantic-release "x.y.z"-syntax for its maintenance branch names), your
-[release configuration](https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md)
-might include:
-
-```javascript
-// Tell xrelease to remove this string from maintenance branch names when
-// resolving their respective ranges and channels
-branchRangePrefix: `${cwdPackageName}@`,
-branches: [
-  // Tell xrelease what package-specific maintenance branch names look like.
-  // Specifically: they must begin with `branchRangePrefix`
-  `${cwdPackageName}@+([0-9])?(.{+([0-9]),x}).x`,
-  // If this is the root package, also accept old-style branch names for compat
-  ...(isCwdPackageTheRootPackage ? ['+([0-9])?(.{+([0-9]),x}).x'] : []),
-  'main'
-]
-```
+To refactor a polyrepo (that uses the standard semantic-release "x.y.z"-syntax
+for its maintenance branch names) into a monorepo (that uses the
+"[package@x.y.z][26]"-syntax for its maintenance branch names), optionally with a root
+package, use [`@-xun/scripts`'s "renovate"
+command][16]: `npx xscripts project
+renovate --task transmute-to-monorepo`.
 
 ## Example
 
@@ -305,8 +305,9 @@ Putting the new configuration options together, we could use what follows to
 release packages from the `/home/user/my-project` hybridrepo (a monorepo with a
 root package), which was formerly a polyrepo that we turned into a monorepo by
 giving its root `package.json` file a
-[`workspaces`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#workspaces)
-key.
+[`workspaces`][27]
+key and [creating scoped aliases of existing maintenance branches and
+tags][16].
 
 The `my-project` repo contains the four packages `my-package-1` through
 `my-package-4` under `/home/user/my-project/packages/*` along with a
@@ -316,13 +317,13 @@ containing the root package's source code.
 
 We can push changes to `main`, which is our primary release branch that
 publishes to one or more packages' respective
-[`@latest` release channel](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#channel)
+[`@latest` release channel][28]
 (the default for NPM projects). Or we can push changes to `canary`, which will
 publish to one or more packages' respective
-[`@canary` release channel](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#pre-release-branches).
+[`@canary` release channel][29].
 We can also push changes to a `package-name@x.y.z` branch, where `package-name`
-represents the name of the monorepo package and `x.y.z` represents a typical
-[maintenance branch `name`](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#maintenance-branches).
+represents the name of the monorepo package and `x.y.z` represents the
+[maintenance branch `range`][30].
 
 ```javascript
 // ./release.config.js
@@ -334,25 +335,23 @@ function makeConfiguration() {
   const cwdPackageName = cwdPackage.json.name;
 
   return {
-    tagFormat: [
-      // Tell xrelease what package-specific tags look like
-      `${cwdPackageName}@\${version}`,
-      // If this is the root package, accept old-style tags for compat
-      ...(isCwdPackageTheRootPackage ? [`v\${version}`] : [])
-    ],
+    // Tell xrelease what package-specific tags look like
+    tagFormat: `${cwdPackageName}@\${version}`,
     // Tell xrelease to remove this string from maintenance branch names when
     // resolving their respective ranges and channels
     branchRangePrefix: `${cwdPackageName}@`,
     gitLogOptions: {
       // Tell xrelease to exclude commits from the other packages
-      path: gitLogPathspecs
+      paths: gitLogPathspecs
     },
     branches: [
       // Tell xrelease what package-specific maintenance branch names look like.
       // Specifically: they must begin with `branchRangePrefix`
       `${cwdPackageName}@+([0-9])?(.{+([0-9]),x}).x`,
-      // If this is the root package, accept old-style branch names for compat
-      ...(isCwdPackageTheRootPackage ? ['+([0-9])?(.{+([0-9]),x}).x'] : []),
+      // If this is the root package, we could accept old-style branch names for
+      // the sake of compatibility. But it's usually better to just create new
+      // branch names aliases matching the `${cwdPackageName}@` pattern
+      //...(isCwdPackageTheRootPackage ? ['+([0-9])?(.{+([0-9]),x}).x'] : []),
       'main',
       {
         name: 'canary',
@@ -372,58 +371,49 @@ module.exports = makeConfiguration();
 ## Contributing
 
 Consider contributing to upstream
-[semantic-release](https://github.com/semantic-release/semantic-release)
+[semantic-release][x-badge-semanticrelease-link]
 instead.
 
-[x-badge-blm-image]: https://xunn.at/badge-blm 'Join the movement!'
+[x-badge-blm-image]: https://xunn.at/badge-blm "Join the movement!"
 [x-badge-blm-link]: https://xunn.at/donate-blm
-[x-badge-codecov-image]:
-  https://img.shields.io/codecov/c/github/Xunnamius/xrelease/main?style=flat-square&token=HWRIOBAAPW
-  'Is this package well-tested?'
+[x-badge-codecov-image]: https://img.shields.io/codecov/c/github/Xunnamius/xrelease/main?style=flat-square&token=HWRIOBAAPW "Is this package well-tested?"
 [x-badge-codecov-link]: https://codecov.io/gh/Xunnamius/xrelease
-[x-badge-downloads-image]:
-  https://img.shields.io/npm/dm/@-xun/release?style=flat-square
-  'Number of times this package has been downloaded per month'
-[x-badge-lastcommit-image]:
-  https://img.shields.io/github/last-commit/Xunnamius/xrelease?style=flat-square
-  'Latest commit timestamp'
-[x-badge-license-image]:
-  https://img.shields.io/npm/l/@-xun/release?style=flat-square
-  "This package's source license"
+[x-badge-downloads-image]: https://img.shields.io/npm/dm/@-xun/release?style=flat-square "Number of times this package has been downloaded per month"
+[x-badge-lastcommit-image]: https://img.shields.io/github/last-commit/Xunnamius/xrelease?style=flat-square "Latest commit timestamp"
+[x-badge-license-image]: https://img.shields.io/npm/l/@-xun/release?style=flat-square "This package's source license"
 [x-badge-license-link]: https://github.com/Xunnamius/xrelease/blob/main/LICENSE
-[x-badge-npm-image]:
-  https://xunn.at/npm-pkg-version/@-xun/release
-  'Install this package using npm or yarn!'
+[x-badge-npm-image]: https://xunn.at/npm-pkg-version/@-xun/release "Install this package using npm or yarn!"
 [x-badge-npm-link]: https://www.npmjs.com/package/@-xun/release
 [x-badge-repo-link]: https://github.com/Xunnamius/xrelease
-[x-badge-semanticrelease-image]:
-  https://xunn.at/badge-semantic-release
-  'This repo practices continuous integration and deployment!'
-[x-badge-semanticrelease-link]:
-  https://github.com/semantic-release/semantic-release
-[x-pkg-cjs-mojito]:
-  https://dev.to/jakobjingleheimer/configuring-commonjs-es-modules-for-nodejs-12ed#publish-only-a-cjs-distribution-with-property-exports
-[x-pkg-dual-package-hazard]:
-  https://nodejs.org/api/packages.html#dual-package-hazard
-[x-pkg-exports-conditions]:
-  https://webpack.js.org/guides/package-exports#reference-syntax
-[x-pkg-exports-module-key]:
-  https://webpack.js.org/guides/package-exports#providing-commonjs-and-esm-version-stateless
-[x-pkg-exports-types-key]:
-  https://devblogs.microsoft.com/typescript/announcing-typescript-4-5-beta#packagejson-exports-imports-and-self-referencing
-[x-pkg-side-effects-key]:
-  https://webpack.js.org/guides/tree-shaking#mark-the-file-as-side-effect-free
-[x-pkg-tree-shaking]: https://webpack.js.org/guides/tree-shaking
-[x-pkg-type]:
-  https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#type
-[x-repo-all-contributors]: https://github.com/all-contributors/all-contributors
-[x-repo-all-contributors-emojis]: https://allcontributors.org/docs/en/emoji-key
-[x-repo-choose-new-issue]:
-  https://github.com/Xunnamius/xrelease/issues/new/choose
-[x-repo-contributing]: /CONTRIBUTING.md
-[x-repo-docs]: docs
-[x-repo-license]: ./LICENSE
-[x-repo-package-json]: package.json
-[x-repo-pr-compare]: https://github.com/Xunnamius/xrelease/compare
-[x-repo-sponsor]: https://github.com/sponsors/Xunnamius
-[x-repo-support]: /.github/SUPPORT.md
+[x-badge-semanticrelease-image]: https://xunn.at/badge-semantic-release "This repo practices continuous integration and deployment!"
+[x-badge-semanticrelease-link]: https://github.com/semantic-release/semantic-release
+[1]: https://github.com/semantic-release/github
+[2]: https://github.com/Xunnamius/xscripts
+[3]: https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag
+[4]: #tagformat
+[5]: #branchrangeprefix
+[6]: #gitlogoptions
+[7]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md
+[8]: https://github.com/vercel/turborepo
+[9]: https://github.com/babel-utils/babel-plugin-tester
+[10]: https://github.com/Xunnamius/unified-utils
+[11]: https://github.com/Xunnamius/xscripts/wiki
+[12]: https://github.com/semantic-release/semantic-release/compare/master...Xunnamius:xrelease:main
+[13]: https://git-scm.com/book/en/v2/Git-Basics-Tagging
+[14]: https://lodash.com/docs#template
+[15]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
+[16]: https://github.com/Xunnamius/xscripts#renovate
+[17]: https://git-scm.com/docs/git-log
+[18]: https://git-scm.com/docs/git-log#_options
+[19]: https://github.com/semantic-release/commit-analyzer
+[20]: https://git-scm.com/docs/git-log#Documentation/git-log.txt---ltpathgt82308203
+[21]: https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-exclude
+[22]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#range
+[23]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#maintenance-branches
+[24]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md#branches
+[25]: mailto:package-name@x.y.z
+[26]: mailto:package@x.y.z
+[27]: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#workspaces
+[28]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#channel
+[29]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#pre-release-branches
+[30]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#maintenance-branches
