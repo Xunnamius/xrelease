@@ -150,10 +150,10 @@ tagFormat: `${cwdPackageName}@\${version}`;
 >
 > `\${version}` is a [Lodash template variable][14] while `${cwdPackageName}` is
 > a variable in a [template string][15]. That is: you are responsible for
-> defining `cwdPackageName` and `isCwdPackageTheRootPackage`, while
-> `\${version}` is defined by xrelease. Additionally, each `tagFormat` value
-> must contain the `version` variable exactly once, and the whole value must
-> compile to a valid git reference.
+> defining `cwdPackageName`, while `\${version}` is replaced by xrelease.
+> Additionally, each `tagFormat` value must contain the `version` variable
+> exactly once, and the whole `tagFormat` value must compile to a valid git
+> reference or commit-ish.
 
 To refactor a polyrepo (that uses the standard semantic-release "v"-syntax for
 its tags) into a monorepo (that uses the "@"-syntax for its tags), optionally
@@ -218,14 +218,14 @@ which would be equivalent.
 Finally, you can use `flags` to ensure [`git log`][20] is invoked with certain
 flags. For instance, we can tell xrelease to ignore all commits reachable by an
 "initial" commit (including said commit itself). This could be useful if we
-forked a large project with many thousands of conventional commits that should
-be ignored by the commit analyzer:
+forked a large project with many thousands of commits (conventional or
+otherwise) that should be ignored by the commit analyzer:
 
 ```javascript
 gitLogOptions: {
-  // Tell xrelease to filter commits created at/after the latest commit with
-  // "[INIT]" in its subject, a reference to which we acquired by running:
-  // const ref = `git log -1 --pretty=format:%H --fixed-strings --grep '[INIT]'`
+  // Tell xrelease to filter commits created after the latest commit (including
+  // itself) with "[INIT]" suffixing its subject, a reference we acquired by
+  // running: `git log -1 --pretty=format:%H --fixed-strings --grep '\\[INIT]$'`
   flags: ref ? [`^${ref}`] : [];
 }
 ```
@@ -340,22 +340,36 @@ module.exports = makeConfiguration();
 Consider contributing to upstream
 [semantic-release][x-badge-semanticrelease-link] instead.
 
-[x-badge-blm-image]: https://xunn.at/badge-blm "Join the movement!"
+[x-badge-blm-image]: https://xunn.at/badge-blm 'Join the movement!'
 [x-badge-blm-link]: https://xunn.at/donate-blm
-[x-badge-codecov-image]: https://img.shields.io/codecov/c/github/Xunnamius/xrelease/main?style=flat-square&token=HWRIOBAAPW "Is this package well-tested?"
+[x-badge-codecov-image]:
+  https://img.shields.io/codecov/c/github/Xunnamius/xrelease/main?style=flat-square&token=HWRIOBAAPW
+  'Is this package well-tested?'
 [x-badge-codecov-link]: https://codecov.io/gh/Xunnamius/xrelease
-[x-badge-downloads-image]: https://img.shields.io/npm/dm/@-xun/release?style=flat-square "Number of times this package has been downloaded per month"
-[x-badge-lastcommit-image]: https://img.shields.io/github/last-commit/Xunnamius/xrelease?style=flat-square "Latest commit timestamp"
-[x-badge-license-image]: https://img.shields.io/npm/l/@-xun/release?style=flat-square "This package's source license"
+[x-badge-downloads-image]:
+  https://img.shields.io/npm/dm/@-xun/release?style=flat-square
+  'Number of times this package has been downloaded per month'
+[x-badge-lastcommit-image]:
+  https://img.shields.io/github/last-commit/Xunnamius/xrelease?style=flat-square
+  'Latest commit timestamp'
+[x-badge-license-image]:
+  https://img.shields.io/npm/l/@-xun/release?style=flat-square
+  "This package's source license"
 [x-badge-license-link]: https://github.com/Xunnamius/xrelease/blob/main/LICENSE
-[x-badge-npm-image]: https://xunn.at/npm-pkg-version/@-xun/release "Install this package using npm or yarn!"
+[x-badge-npm-image]:
+  https://xunn.at/npm-pkg-version/@-xun/release
+  'Install this package using npm or yarn!'
 [x-badge-npm-link]: https://www.npmjs.com/package/@-xun/release
 [x-badge-repo-link]: https://github.com/Xunnamius/xrelease
-[x-badge-semanticrelease-image]: https://xunn.at/badge-semantic-release "This repo practices continuous integration and deployment!"
-[x-badge-semanticrelease-link]: https://github.com/semantic-release/semantic-release
+[x-badge-semanticrelease-image]:
+  https://xunn.at/badge-semantic-release
+  'This repo practices continuous integration and deployment!'
+[x-badge-semanticrelease-link]:
+  https://github.com/semantic-release/semantic-release
 [1]: https://github.com/semantic-release/github
 [2]: https://github.com/Xunnamius/xscripts
-[3]: https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag
+[3]:
+  https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag
 [4]: #tagformat
 [5]: #branchrangeprefix
 [6]: #gitlogoptions
@@ -364,22 +378,31 @@ Consider contributing to upstream
 [9]: https://github.com/babel-utils/babel-plugin-tester
 [10]: https://github.com/Xunnamius/unified-utils
 [11]: https://github.com/Xunnamius/xscripts/wiki
-[12]: https://github.com/semantic-release/semantic-release/compare/master...Xunnamius:xrelease:main
+[12]:
+  https://github.com/semantic-release/semantic-release/compare/master...Xunnamius:xrelease:main
 [13]: https://git-scm.com/book/en/v2/Git-Basics-Tagging
 [14]: https://lodash.com/docs#template
-[15]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
+[15]:
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
 [16]: https://github.com/Xunnamius/xscripts#renovate
 [17]: https://git-scm.com/docs/git-log
 [18]: https://git-scm.com/docs/git-log#_options
 [19]: https://github.com/semantic-release/commit-analyzer
-[20]: https://git-scm.com/docs/git-log#Documentation/git-log.txt---ltpathgt82308203
+[20]:
+  https://git-scm.com/docs/git-log#Documentation/git-log.txt---ltpathgt82308203
 [21]: https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-exclude
-[22]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#range
-[23]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#maintenance-branches
-[24]: https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md#branches
+[22]:
+  https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#range
+[23]:
+  https://github.com/Xunnamius/xrelease/blob/main/docs/usage/workflow-configuration.md#maintenance-branches
+[24]:
+  https://github.com/Xunnamius/xrelease/blob/main/docs/usage/configuration.md#branches
 [25]: mailto:package-name@x.y.z
 [26]: mailto:package@x.y.z
 [27]: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#workspaces
-[28]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#channel
-[29]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#pre-release-branches
-[30]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#maintenance-branches
+[28]:
+  https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#channel
+[29]:
+  https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#pre-release-branches
+[30]:
+  https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#maintenance-branches
