@@ -58,10 +58,10 @@
     "/LICENSE"
   ],
   "scripts": {
-    "build": "NODE_NO_WARNINGS=1 tsc --no-check --incremental false",
+    "build": "NODE_NO_WARNINGS=1 tsc --project tsc.package.types.json --noCheck --incremental false",
     "build:changelog": "NODE_NO_WARNINGS=1 xscripts build changelog",
     "clean": "NODE_NO_WARNINGS=1 xscripts clean",
-    "format": "NODE_NO_WARNINGS=1 xscripts format --hush --files README.md",
+    "format": "NODE_NO_WARNINGS=1 xscripts format --hush --files  README.md package.json conventional.config.cjs release.config.cjs .prettierignore tsconfig.json tsc.project.lint-unlimited.json .remarkrc.mjs",
     "lint": "NODE_NO_WARNINGS=1 xscripts lint --linter remark",
     "list-tasks": "NODE_NO_WARNINGS=1 xscripts list-tasks",
     "release": "NODE_NO_WARNINGS=1 xscripts release --skip-missing-tasks",
@@ -144,6 +144,7 @@
     "node": ">=20.8.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
