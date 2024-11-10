@@ -29,18 +29,14 @@ A <a href="https://github.com/semantic-release/github" target="_blank">semantic-
 
 # xrelease (@-xun/release)
 
-This [semantic-release][1] fork
-slightly tweaks the original so that it can work with both polyrepos and
-monorepos.
+This [semantic-release][1] fork slightly tweaks the original so that it can work
+with both polyrepos and monorepos.
 
 > \[!NOTE]
 >
-> The only reason to use xrelease over
-> [semantic-release][1] is if you are
-> using an [xscripts][2]-powered project,
-> your repository uses annotated tags, or your repository is a monorepo.
-> Otherwise, just use
-> [semantic-release][1].
+> The only reason to use xrelease over [semantic-release][1] is if you are using
+> an [xscripts][2]-powered project, your repository uses annotated tags, or your
+> repository is a monorepo. Otherwise, just use [semantic-release][1].
 
 <br />
 
@@ -88,9 +84,7 @@ xrelease offers a couple improvements over upstream:
 
 ### Lightweight and Annotated Tag Support
 
-Both
-[lightweight and annotated tags][3]
-are supported.
+Both [lightweight and annotated tags][3] are supported.
 
 > `man git-tag` says:
 >
@@ -105,9 +99,8 @@ option and the introduction of two new options: [`branchRangePrefix`][5] and
 
 > \[!WARNING]
 >
-> These options have only been tested in
-> [release configuration files][7]
-> and might not be available via CLI.
+> These options have only been tested in [release configuration files][7] and
+> might not be available via CLI.
 
 Once properly configured, xrelease should be run once per package to be
 released, with the current working directory set to the root of each respective
@@ -117,24 +110,18 @@ For monorepos, if the current working directory does not contain the
 repository's release configuration file, use `--extends` to refer to its
 location explicitly (e.g. `--extends ../../release.config.js`); xrelease
 supports using `--extends` to load plugins from `/node_modules/` directories
-higher up in the repository tree. Further, a tool like
-[Turbo][8] can be used to orchestrate package
-releases in dependency order.
+higher up in the repository tree. Further, a tool like [Turbo][8] can be used to
+orchestrate package releases in dependency order.
 
 > \[!NOTE]
 >
-> See
-> [babel-plugin-tester's `release.config.js`][9]
-> (polyrepo),
-> [xscripts's `release.config.js`][2]
-> (hybridrepo) or
-> [unified-utils's `release.config.js`][10]
-> (monorepo) for complete functional examples of xrelease configurations in the
-> wild.
+> See [babel-plugin-tester's `release.config.js`][9] (polyrepo), [xscripts's
+> `release.config.js`][2] (hybridrepo) or [unified-utils's
+> `release.config.js`][10] (monorepo) for complete functional examples of
+> xrelease configurations in the wild.
 >
-> See the [xscripts wiki][11] or the
-> [git diff between this repo and upstream][12]
-> for technical details.
+> See the [xscripts wiki][11] or the [git diff between this repo and
+> upstream][12] for technical details.
 
 The extended configuration options are:
 
@@ -152,9 +139,7 @@ tags belong to the current package to be released and which belong to other
 packages that should be filtered out.
 
 To support a simple monorepo that uses "@"-syntax for its release tags (e.g.
-`my-package@1.2.3`), your
-[release configuration][7]
-might include:
+`my-package@1.2.3`), your [release configuration][7] might include:
 
 ```javascript
 // Tell xrelease what package-specific tags look like
@@ -163,19 +148,16 @@ tagFormat: `${cwdPackageName}@\${version}`;
 
 > \[!CAUTION]
 >
-> `\${version}` is a
-> [Lodash template variable][14] while
-> `${cwdPackageName}` is a variable in a
-> [template string][15].
-> That is: you are responsible for defining `cwdPackageName` and
-> `isCwdPackageTheRootPackage`, while `\${version}` is defined by xrelease.
-> Additionally, each `tagFormat` value must contain the `version` variable
-> exactly once, and the whole value must compile to a valid git reference.
+> `\${version}` is a [Lodash template variable][14] while `${cwdPackageName}` is
+> a variable in a [template string][15]. That is: you are responsible for
+> defining `cwdPackageName` and `isCwdPackageTheRootPackage`, while
+> `\${version}` is defined by xrelease. Additionally, each `tagFormat` value
+> must contain the `version` variable exactly once, and the whole value must
+> compile to a valid git reference.
 
 To refactor a polyrepo (that uses the standard semantic-release "v"-syntax for
 its tags) into a monorepo (that uses the "@"-syntax for its tags), optionally
-with a root package, use
-[`@-xun/scripts`'s "renovate" command][16]:
+with a root package, use [`@-xun/scripts`'s "renovate" command][16]:
 `npx xscripts project renovate --task transmute-to-monorepo`.
 
 #### `gitLogOptions`
@@ -185,16 +167,15 @@ Default: `"v${version}"`
 
 The [git log][17] [command line arguments][18] used by xrelease to select
 commits for [further analysis][19]. Currently, `gitLogOptions` has two valid
-options: `flags` and `paths`, which correspond to [`git log <flags> -- <paths>`][20].
+options: `flags` and `paths`, which correspond to
+[`git log <flags> -- <paths>`][20].
 
-`gitLogOptions` is key to proper monorepo support since it dictates what
-commits belong to the current package to be released and which belong to other
-packages that should be filtered out.
+`gitLogOptions` is key to proper monorepo support since it dictates what commits
+belong to the current package to be released and which belong to other packages
+that should be filtered out.
 
 To support a monorepo attempting to release a new version of `my-package-1`,
-your
-[release configuration][7]
-might include:
+your [release configuration][7] might include:
 
 ```javascript
 gitLogOptions: {
@@ -207,13 +188,11 @@ gitLogOptions: {
 }
 ```
 
-In this example, we used
-[exclusion pathspecs][21]
-to create a blacklist of paths we _didn't want_ instead of a whitelist of paths
-we do want. Either approach is viable depending on project structure; however,
-using exclusions ensures important changes that happen outside the package's
-root directory (such as changes to a shared unpublished library) are considered
-by xrelease when
+In this example, we used [exclusion pathspecs][21] to create a blacklist of
+paths we _didn't want_ instead of a whitelist of paths we do want. Either
+approach is viable depending on project structure; however, using exclusions
+ensures important changes that happen outside the package's root directory (such
+as changes to a shared unpublished library) are considered by xrelease when
 [analyzing commits][19].
 
 Note how the given pathspecs are relative to e.g.
@@ -224,9 +203,7 @@ The given pathspecs happen to work for releasing each of the other packages as
 well, assuming they are all share the same parent directory, e.g.
 `/home/user/my-project/packages`.
 
-To support a polyrepo instead, your
-[release configuration][7]
-might include:
+To support a polyrepo instead, your [release configuration][7] might include:
 
 ```javascript
 gitLogOptions: {
@@ -260,12 +237,8 @@ You can pass any flag that [`git log`][20] understands.
 Type: `string`\
 Default: `""`
 
-The value that prefixes the
-[names][22]
-of relevant
-[maintenance branches][23].
-This is used internally by xrelease to generate the proper
-[`branches`][24]
+The value that prefixes the [names][22] of relevant [maintenance branches][23].
+This is used internally by xrelease to generate the proper [`branches`][24]
 configurations for maintenance branches that refer to particular packages in a
 monorepo, and can be left undefined in a polyrepo.
 
@@ -276,9 +249,8 @@ monorepo, and can be left undefined in a polyrepo.
 > `branchRangePrefix`, xrelease's behavior is undefined.
 
 To support a simple monorepo that uses "[package-name@x.y.z][25]"-syntax for its
-maintenance branch names (e.g. `my-package@1.2.3`), your
-[release configuration][7]
-might include:
+maintenance branch names (e.g. `my-package@1.2.3`), your [release
+configuration][7] might include:
 
 ```javascript
 // Tell xrelease to remove this string from maintenance branch names when
@@ -294,20 +266,17 @@ branches: [
 
 To refactor a polyrepo (that uses the standard semantic-release "x.y.z"-syntax
 for its maintenance branch names) into a monorepo (that uses the
-"[package@x.y.z][26]"-syntax for its maintenance branch names), optionally with a root
-package, use [`@-xun/scripts`'s "renovate"
-command][16]: `npx xscripts project
-renovate --task transmute-to-monorepo`.
+"[package@x.y.z][26]"-syntax for its maintenance branch names), optionally with
+a root package, use [`@-xun/scripts`'s "renovate" command][16]:
+`npx xscripts project renovate --task transmute-to-monorepo`.
 
 ## Example
 
 Putting the new configuration options together, we could use what follows to
 release packages from the `/home/user/my-project` hybridrepo (a monorepo with a
 root package), which was formerly a polyrepo that we turned into a monorepo by
-giving its root `package.json` file a
-[`workspaces`][27]
-key and [creating scoped aliases of existing maintenance branches and
-tags][16].
+giving its root `package.json` file a [`workspaces`][27] key and [creating
+scoped aliases of existing maintenance branches and tags][16].
 
 The `my-project` repo contains the four packages `my-package-1` through
 `my-package-4` under `/home/user/my-project/packages/*` along with a
@@ -316,12 +285,10 @@ package (`my-root-package`) and a `/home/user/my-project/src` directory
 containing the root package's source code.
 
 We can push changes to `main`, which is our primary release branch that
-publishes to one or more packages' respective
-[`@latest` release channel][28]
+publishes to one or more packages' respective [`@latest` release channel][28]
 (the default for NPM projects). Or we can push changes to `canary`, which will
-publish to one or more packages' respective
-[`@canary` release channel][29].
-We can also push changes to a `package-name@x.y.z` branch, where `package-name`
+publish to one or more packages' respective [`@canary` release channel][29]. We
+can also push changes to a `package-name@x.y.z` branch, where `package-name`
 represents the name of the monorepo package and `x.y.z` represents the
 [maintenance branch `range`][30].
 
@@ -371,8 +338,7 @@ module.exports = makeConfiguration();
 ## Contributing
 
 Consider contributing to upstream
-[semantic-release][x-badge-semanticrelease-link]
-instead.
+[semantic-release][x-badge-semanticrelease-link] instead.
 
 [x-badge-blm-image]: https://xunn.at/badge-blm "Join the movement!"
 [x-badge-blm-link]: https://xunn.at/donate-blm
