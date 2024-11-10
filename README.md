@@ -199,9 +199,11 @@ Note how the given pathspecs are relative to e.g.
 `/home/user/my-project/packages/my-package-1`. That's because xrelease should
 always be run at the root of the package to be released.
 
-The given pathspecs happen to work for releasing each of the other packages as
-well, assuming they are all share the same parent directory, e.g.
-`/home/user/my-project/packages`.
+The pathspec syntax we're using happens to work for releasing each of the other
+packages as well, assuming they are all share the same parent directory, e.g.
+`/home/user/my-project/packages`. If we wanted to release `my-package-2` next,
+we would replace `':(exclude)../my-package-2'` with
+`':(exclude)../my-package-1'` and run xrelease again.
 
 To support a polyrepo instead, your [release configuration][7] might include:
 
