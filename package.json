@@ -24,7 +24,7 @@
   "license": "MIT",
   "author": "Xunnamius",
   "sideEffects": false,
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./index.d.ts",
