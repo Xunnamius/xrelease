@@ -20,5 +20,5 @@
     "rootDir": "./"
   },
   // ? Include patterns are also used by tooling like eslint (using node glob)
-  "include": ["index.js", "cli.js", "lib/**/*"]
+  "include": ["index.js"]
 }

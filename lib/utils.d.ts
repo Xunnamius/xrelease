@@ -1,0 +1,15 @@
+export function extractErrors(err: any): any[];
+export function hideSensitiveValues(env: any, objs: any): any;
+export function tagsToVersions(tags: any): any;
+export function isMajorRange(range: any): boolean;
+export function isMaintenanceRange(range: any): boolean;
+export function getUpperBound(range: any): any;
+export function getLowerBound(range: any): string;
+export function highest(version1: any, version2: any): any;
+export function lowest(version1: any, version2: any): any;
+export function getLatestVersion(versions: any, { withPrerelease }?: {}): any;
+export function getEarliestVersion(versions: any, { withPrerelease }?: {}): any;
+export function getFirstVersion(versions: any, lowerBranches: any): any;
+export function getRange(min: any, max: any): string;
+export function makeTag(tagFormat: any, version: any): any;
+export function isSameChannel(channel: any, otherChannel: any): boolean;
