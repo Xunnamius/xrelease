@@ -58,7 +58,7 @@
     "/LICENSE"
   ],
   "scripts": {
-    "build": "echo '(note that semantic-release's index.d.ts file is hand-written)'",
+    "build": "echo '(note that the semantic-release index.d.ts file is hand-written)'",
     "build:changelog": "NODE_NO_WARNINGS=1 xscripts build changelog",
     "clean": "NODE_NO_WARNINGS=1 xscripts clean",
     "format": "NODE_NO_WARNINGS=1 xscripts format --hush --files  README.md package.json conventional.config.cjs release.config.cjs .prettierignore tsconfig.json tsc.project.lint-unlimited.json .remarkrc.mjs",
