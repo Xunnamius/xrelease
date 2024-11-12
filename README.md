@@ -30,13 +30,14 @@ A <a href="https://github.com/semantic-release/github" target="_blank">semantic-
 # xrelease (@-xun/release)
 
 This [semantic-release][1] fork slightly tweaks the original so that it can work
-with both polyrepos and monorepos.
+with both polyrepos and monorepos (see [below][31]).
 
 > \[!NOTE]
 >
 > The only reason to use xrelease over [semantic-release][1] is if you are using
-> an [xscripts][2]-powered project, your repository uses annotated tags, or your
-> repository is a monorepo. Otherwise, just use [semantic-release][1].
+> an [xscripts][2]-powered project, your repository uses annotated tags, you
+> need the bug fixes, or your repository is a monorepo. Otherwise, just use
+> [semantic-release][1].
 
 <br />
 
@@ -148,12 +149,12 @@ tagFormat: `${cwdPackageName}@\${version}`;
 
 > \[!CAUTION]
 >
-> `\${version}` is a [Lodash template variable][14] while `${cwdPackageName}` is
-> a variable in a [template string][15]. That is: you are responsible for
-> defining `cwdPackageName`, while `\${version}` is replaced by xrelease.
-> Additionally, each `tagFormat` value must contain the `version` variable
-> exactly once, and the whole `tagFormat` value must compile to a valid git
-> reference or commit-ish.
+> `\${version}` (or `${version}` in a non-template string literal) is a [Lodash
+> template variable][14] while `${cwdPackageName}` is a variable in a [template
+> string literal][15]. That is: you are responsible for defining `cwdPackageName`, while
+> `\${version}` is replaced by xrelease. Additionally, each `tagFormat` value
+> must contain the `version` variable exactly once, and the whole `tagFormat`
+> value must compile to a valid git reference or commit-ish.
 
 To refactor a polyrepo (that uses the standard semantic-release "v"-syntax for
 its tags) into a monorepo (that uses the "@"-syntax for its tags), optionally
@@ -385,3 +386,4 @@ Consider contributing to upstream
 [28]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#channel
 [29]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#pre-release-branches
 [30]: https://github.com/semantic-release/semantic-release/blob/master/docs/usage/workflow-configuration.md#maintenance-branches
+[31]: #support-for-monorepos
