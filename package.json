@@ -13,13 +13,13 @@
     "semver",
     "version"
   ],
-  "homepage": "https://github.com/Xunnamius/xscripts#readme",
+  "homepage": "https://github.com/Xunnamius/xrelease#readme",
   "bugs": {
-    "url": "https://github.com/Xunnamius/xscripts/issues"
+    "url": "https://github.com/Xunnamius/xrelease/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Xunnamius/xscripts.git"
+    "url": "git+https://github.com/Xunnamius/xrelease.git"
   },
   "license": "MIT",
   "author": "Xunnamius",
