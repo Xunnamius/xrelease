@@ -64,7 +64,7 @@
     "format": "NODE_NO_WARNINGS=1 xscripts format --hush --files  README.md package.json conventional.config.cjs release.config.cjs .prettierignore tsconfig.json tsc.project.lint-unlimited.json .remarkrc.mjs",
     "lint": "NODE_NO_WARNINGS=1 xscripts lint --linter remark",
     "list-tasks": "NODE_NO_WARNINGS=1 xscripts list-tasks",
-    "release": "NODE_NO_WARNINGS=1 xscripts release --skip-task-missing-scripts",
+    "release": "NODE_NO_WARNINGS=1 xscripts release --skip-task-missing-scripts --skip-task 8 12",
     "test": "NODE_NO_WARNINGS=1 c8 ava --verbose"
   },
   "ava": {
