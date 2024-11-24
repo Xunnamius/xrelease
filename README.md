@@ -189,8 +189,8 @@ gitLogOptions: {
 }
 ```
 
-In this example, we used [exclusion pathspecs][21] to create a blacklist of
-paths we _didn't want_ instead of a whitelist of paths we do want. Either
+In this example, we used [exclusion pathspecs][21] to create a denylist of
+paths we _didn't want_ instead of an allowlist of paths we do want. Either
 approach is viable depending on project structure; however, using exclusions
 ensures important changes that happen outside the package's root directory (such
 as changes to a shared unpublished library) are considered by xrelease when
