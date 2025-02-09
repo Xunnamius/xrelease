@@ -32,10 +32,10 @@ A <a href="https://github.com/semantic-release/github" target="_blank">semantic-
 This [semantic-release][1] fork slightly tweaks the original so that it can work
 with both polyrepos and monorepos (see [below][31]).
 
-> \[!NOTE]
+> [!NOTE]
 >
 > The only reason to use xrelease over [semantic-release][1] is if you are using
-> an [xscripts][2]-powered project, your repository uses annotated tags, you
+> an [symbiote][2]-powered project, your repository uses annotated tags, you
 > need the bug fixes, or your repository is a monorepo. Otherwise, just use
 > [semantic-release][1].
 
@@ -73,7 +73,7 @@ If you want to use a specific version of xrelease, provide its semver:
 npm install --save-dev semantic-release@npm:@-xun/release@1.2.3
 ```
 
-> \[!NOTE]
+> [!NOTE]
 >
 > xrelease installations reuse the "semantic-release" name so that plugins with
 > semantic-release as a peer dependency are able to recognize xrelease's
@@ -89,8 +89,8 @@ Both [lightweight and annotated tags][3] are supported.
 
 > `man git-tag` says:
 >
-> > Annotated tags are meant for release while lightweight tags are meant for
-> > private or temporary object labels.
+> Annotated tags are meant for release while lightweight tags are meant for
+> private or temporary object labels.
 
 ### Support for Monorepos
 
@@ -98,7 +98,7 @@ Monorepo support is implemented via the existing [`tagFormat`][4] configuration
 option and the introduction of two new options: [`branchRangePrefix`][5] and
 [`gitLogOptions`][6].
 
-> \[!WARNING]
+> [!WARNING]
 >
 > These options have only been tested in [release configuration files][7] and
 > might not be available via CLI.
@@ -114,14 +114,14 @@ supports using `--extends` to load plugins from `/node_modules/` directories
 higher up in the repository tree. Further, a tool like [Turbo][8] can be used to
 orchestrate package releases in dependency order.
 
-> \[!NOTE]
+> [!NOTE]
 >
-> See [babel-plugin-tester's `release.config.js`][9] (polyrepo), [xscripts's
+> See [babel-plugin-tester's `release.config.js`][9] (polyrepo), [symbiote's
 > `release.config.js`][2] (hybridrepo) or [unified-utils's
 > `release.config.js`][10] (monorepo) for complete functional examples of
 > xrelease configurations in the wild.
 >
-> See the [xscripts wiki][11] or the [git diff between this repo and
+> See the [symbiote wiki][11] or the [git diff between this repo and
 > upstream][12] for technical details.
 
 The extended configuration options are:
@@ -147,7 +147,7 @@ To support a simple monorepo that uses "@"-syntax for its release tags (e.g.
 tagFormat: `${cwdPackageName}@\${version}`;
 ```
 
-> \[!CAUTION]
+> [!CAUTION]
 >
 > `\${version}` (or `${version}` in a non-template string literal) is a [Lodash
 > template variable][14] while `${cwdPackageName}` is a variable in a [template
@@ -160,7 +160,7 @@ tagFormat: `${cwdPackageName}@\${version}`;
 To refactor a polyrepo (that uses the standard semantic-release "v"-syntax for
 its tags) into a monorepo (that uses the "@"-syntax for its tags), optionally
 with a root package, use [`@-xun/scripts`'s "renovate" command][16]:
-`npx xscripts project renovate --task transmute-to-monorepo`.
+`npx symbiote project renovate --regenerate-assets --preset ...`.
 
 #### `gitLogOptions`
 
@@ -246,7 +246,7 @@ This is used internally by xrelease to generate the proper [`branches`][24]
 configurations for maintenance branches that refer to particular packages in a
 monorepo, and can be left undefined in a polyrepo.
 
-> \[!CAUTION]
+> [!CAUTION]
 >
 > The `branchRangePrefix` string must **only match maintenance branches**! If
 > you also define a non-maintenance branch with a name starting with
@@ -272,7 +272,7 @@ To refactor a polyrepo (that uses the standard semantic-release "x.y.z"-syntax
 for its maintenance branch names) into a monorepo (that uses the
 "[package@x.y.z][26]"-syntax for its maintenance branch names), optionally with
 a root package, use [`@-xun/scripts`'s "renovate" command][16]:
-`npx xscripts project renovate --task transmute-to-monorepo`.
+`npx symbiote project renovate --regenerate-assets --preset ...`.
 
 ## Example
 
@@ -371,7 +371,7 @@ Consider contributing to upstream
 [x-badge-semanticrelease-link]:
   https://github.com/semantic-release/semantic-release
 [1]: https://github.com/semantic-release/github
-[2]: https://github.com/Xunnamius/xscripts
+[2]: https://github.com/Xunnamius/symbiote
 [3]:
   https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag
 [4]: #tagformat
@@ -381,14 +381,14 @@ Consider contributing to upstream
 [8]: https://github.com/vercel/turborepo
 [9]: https://github.com/babel-utils/babel-plugin-tester
 [10]: https://github.com/Xunnamius/unified-utils
-[11]: https://github.com/Xunnamius/xscripts/wiki
+[11]: https://github.com/Xunnamius/symbiote/wiki
 [12]:
   https://github.com/semantic-release/semantic-release/compare/master...Xunnamius:xrelease:main
 [13]: https://git-scm.com/book/en/v2/Git-Basics-Tagging
 [14]: https://lodash.com/docs#template
 [15]:
   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
-[16]: https://github.com/Xunnamius/xscripts#renovate
+[16]: https://github.com/Xunnamius/symbiote#renovate
 [17]: https://git-scm.com/docs/git-log
 [18]: https://git-scm.com/docs/git-log#_options
 [19]: https://github.com/semantic-release/commit-analyzer

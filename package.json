@@ -59,12 +59,14 @@
   ],
   "scripts": {
     "build": "echo '(note that the semantic-release index.d.ts file is hand-written)'",
-    "build:changelog": "NODE_NO_WARNINGS=1 xscripts build changelog",
-    "clean": "NODE_NO_WARNINGS=1 xscripts clean",
-    "format": "NODE_NO_WARNINGS=1 xscripts format --hush --files  README.md package.json conventional.config.cjs release.config.cjs .prettierignore tsconfig.json tsc.project.lint-unlimited.json .remarkrc.mjs",
-    "lint": "NODE_NO_WARNINGS=1 xscripts lint --linter remark",
-    "list-tasks": "NODE_NO_WARNINGS=1 xscripts list-tasks",
-    "release": "NODE_NO_WARNINGS=1 xscripts release --skip-task-missing-scripts --skip-task 8 12",
+    "build:changelog": "symbiote build changelog --env NODE_NO_WARNINGS=1",
+    "clean": "symbiote clean --env NODE_NO_WARNINGS=1",
+    "format": "symbiote format --env NODE_NO_WARNINGS=1 --hush --files README.md package.json conventional.config.cjs release.config.cjs .prettierignore tsconfig.json tsc.project.lint-unlimited.json .remarkrc.mjs",
+    "info": "symbiote project info --env NODE_NO_WARNINGS=1",
+    "lint": "symbiote lint --env NODE_NO_WARNINGS=1 --hush --linter remark",
+    "list-tasks": "symbiote list-tasks --env NODE_NO_WARNINGS=1 --scope this-package",
+    "prepare": "symbiote project prepare --env NODE_NO_WARNINGS=1",
+    "release": "symbiote release --env NODE_NO_WARNINGS=1 --skip-task 6 12",
     "test": "NODE_NO_WARNINGS=1 c8 ava --verbose"
   },
   "ava": {
@@ -124,7 +126,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@-xun/scripts": "^1.30.0",
+    "@-xun/symbiote": "^2.23.6",
     "ava": "5.3.0",
     "c8": "7.14.0",
     "dockerode": "4.0.2",
