@@ -1,15 +1,22 @@
 // @ts-check
 'use strict';
 
-const debug = require('debug')('xscripts:semantic-release-config');
+const { deepMergeConfig } = require('@-xun/symbiote/assets');
 
-const { deepMergeConfig } = require('@-xun/scripts/assets');
-const { moduleExport } = require('@-xun/scripts/assets/config/release.config.cjs');
+const {
+  assertEnvironment,
+  moduleExport
+} = require('@-xun/symbiote/assets/release.config.cjs');
 
-const { parserOpts, writerOpts } = require('./conventional.config.cjs');
+const { createDebugLogger } = require('rejoinder');
 
-module.exports = deepMergeConfig(moduleExport({ parserOpts, writerOpts }), {
-  // Any custom configs here will be deep merged with moduleExport's result
-});
+const debug = createDebugLogger({ namespace: 'symbiote:config:release' });
 
-debug('exports: %O', module.exports);
+module.exports = deepMergeConfig(
+  moduleExport(assertEnvironment({ projectRoot: __dirname })),
+  {
+    // Any custom configs here will be deep merged with moduleExport's result
+  }
+);
+
+debug('exported config: %O', module.exports);

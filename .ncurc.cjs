@@ -1,9 +1,11 @@
+// @ts-check
 'use strict';
 
-// {@xscripts/notExtraneous npm-check-updates}
+const { createDebugLogger } = require('rejoinder');
+
+const debug = createDebugLogger({ namespace: 'symbiote:config:ncurc' });
 
 // * https://www.npmjs.com/package/npm-check-updates#configuration-files
-// @renovate
 module.exports = {
   install: 'never',
   reject: [
@@ -11,3 +13,5 @@ module.exports = {
     '*~*'
   ]
 };
+
+debug('exported config: %O', module.exports);

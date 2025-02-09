@@ -1,17 +1,13 @@
 {
-  "editor.formatOnSave": false,
-  "cSpell.ignoreWords": [
-    "mergeme"
-  ],
-  "cSpell.words": [
-    "Bönnemann",
-    "dockerode",
-    "Gregor",
-    "Martynus",
-    "mockserver",
-    "signale",
-    "tempy",
-    "Travi",
-    "Vanduynslager"
-  ]
+  // ! Note that some of these configurations are ignored when the project is
+  // ! opened as part of a vscode workspace (especially multi-root). In such a
+  // ! case, look to the workspace's configuration file for tweakable settings.
+
+  "debug.javascript.terminalOptions": {
+    //"skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    "skipFiles": []
+  },
+  "cSpell.words": [],
+  // ? Use the version of TypeScript that is installed alongside the project
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
