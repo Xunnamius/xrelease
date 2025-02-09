@@ -1,6 +1,6 @@
 {
   "name": "@-xun/release",
-  "version": "24.2.1",
+  "version": "24.2.2",
   "description": "A semantic-release fork with support for annotated tags and monorepos",
   "keywords": [
     "author",
